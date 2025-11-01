@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citra Abadi - Produk</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="/citra-abadi/img/NPOTA CITRA ABADI.png" alt="Logo" class="logo-img">
+                    <span class="logo-text">CITRA ABADI</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="about.html" class="nav-link">Tentang Kami</a>
+                <a href="product.html" class="nav-link active">Produk</a>
+                <a href="contact.html" class="nav-link">Kontak</a>
+                <a href="developer.html" class="nav-link">Developer</a>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Cari produk...">
+                </div>
+                <div class="cart-icon">
+                    <a href="#" id="cart-toggle" aria-label="Lihat keranjang belanja">🛒 <span id="cart-count">0</span></a>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Products Section -->
+    <section class="products">
+        <div class="container">
+            <div class="section-title">
+                <h1>Product</h1>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section class="order-form" id="order-form">
+        <div class="container">
+            <div class="section-title">
+                <h2>Form Pemesanan</h2>
+            </div>
+            <form id="order-form-details">
+                <div class="form-group">
+                    <label for="customer-name">Nama Pelanggan</label>
+                    <input type="text" id="customer-name" name="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Nomor Telepon</label>
+                    <input type="tel" id="customer-phone" name="customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="pickup-date">Tanggal Ambil</label>
+                    <input type="date" id="pickup-date" name="pickup-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="pickup-time">Waktu Ambil</label>
+                    <input type="time" id="pickup-time" name="pickup-time" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Catatan Tambahan</label>
+                    <textarea id="notes" name="notes" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Konfirmasi Pesanan</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Citra Abadi</p>
+            <p>Nglegok, Kab. Blitar | +62 813-3599-7984</p>
+            <p>Developed by Kelompok 4 | PWEB</p>
+        </div>
+    </footer>
+
+    <!-- Product Detail Modal -->
+    <div class="product-modal" id="product-modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <div class="modal-body" id="modal-body">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar" role="region" aria-label="Keranjang belanja">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button id="close-cart" aria-label="Tutup keranjang">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total">
+            <p>Total: <span id="cart-total-price">Rp 0</span></p>
+            <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
+        </div>
+    </div>
+
+    <script src="assets/main.js"></script>
+</body>
+</html>
