@@ -419,4 +419,12 @@ window.addEventListener("load", () => {
   const hero = document.querySelector(".hero");
   if (hero) hero.classList.add("fade-in");
 });
+<!-- JAVASCRIPT -->
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Terima kasih atas ulasan Anda!');
+      this.reset();
+    });
+  </script>
 
