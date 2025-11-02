@@ -426,5 +426,11 @@ window.addEventListener("load", () => {
       alert('Terima kasih atas ulasan Anda!');
       this.reset();
     });
+// contact
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Terima kasih atas ulasan Anda!');
+      this.reset();
+    });
   </script>
 
