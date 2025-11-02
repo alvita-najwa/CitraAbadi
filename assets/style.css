@@ -480,34 +480,30 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Footer */
-/* Footer Modern Gradient */
+/* Footer Elegan */
 .footer {
-  background: linear-gradient(135deg, #1e1e1e, #2a2a2a, #0d47a1);
+  background: linear-gradient(135deg, #1e1e1e, #2b2b2b, #0d47a1);
   color: #f0f0f0;
   text-align: center;
   padding: 2.5rem 1rem;
   font-size: 0.95rem;
   font-family: 'Poppins', sans-serif;
-  border-top: 2px solid rgba(255, 255, 255, 0.15);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
   letter-spacing: 0.4px;
-  line-height: 1.6;
+  line-height: 1.7;
   position: relative;
-  overflow: hidden;
 }
 
-
-/* Isi footer tetap di atas efek */
+/* Container isi footer */
 .footer-container {
-  position: relative;
-  z-index: 2;
   max-width: 900px;
   margin: 0 auto;
 }
 
 /* Info teks */
 .footer-info p {
-  margin: 0.3rem 0;
-  color: #d0d0d0;
+  margin: 0.4rem 0;
+  color: #cccccc;
   transition: color 0.3s ease;
 }
 
@@ -519,7 +515,7 @@ h1, h2, h3, h4, h5, h6 {
 .footer-dev {
   margin-top: 1rem;
   font-size: 0.9rem;
-  color: #aaa;
+  color: #aaaaaa;
 }
 
 .footer-dev .dev-name {
@@ -530,7 +526,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer-dev .dev-name:hover {
   color: #00e5ff;
-  text-shadow: 0 0 8px #00e5ff;
+  text-shadow: 0 0 6px #00e5ff;
 }
 
 .footer-dev .subject {
@@ -542,7 +538,6 @@ h1, h2, h3, h4, h5, h6 {
 .footer-dev .subject:hover {
   color: #fff176;
 }
-
 
 
 /* Product Modal */
