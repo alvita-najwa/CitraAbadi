@@ -480,47 +480,86 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Footer */
+/* Footer Modern Gradient */
 .footer {
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-    text-align: center;
-    padding: 2rem 1rem;
-    font-size: 0.95rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-family: 'Poppins', sans-serif;
-    letter-spacing: 0.3px;
-    line-height: 1.6;
+  background: linear-gradient(135deg, #1e1e1e, #2a2a2a, #0d47a1);
+  color: #f0f0f0;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  border-top: 2px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.4px;
+  line-height: 1.6;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Efek cahaya lembut di belakang */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(0, 123, 255, 0.15), transparent 70%);
+  animation: rotateGlow 15s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Isi footer tetap di atas efek */
 .footer-container {
-    max-width: 900px;
-    margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
+/* Info teks */
 .footer-info p {
-    margin: 0.3rem 0;
-    color: #cccccc;
+  margin: 0.3rem 0;
+  color: #d0d0d0;
+  transition: color 0.3s ease;
 }
 
+.footer-info p:hover {
+  color: #ffffff;
+}
+
+/* Developer credit */
 .footer-dev {
-    margin-top: 0.8rem;
-    font-size: 0.9rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #aaa;
 }
 
 .footer-dev .dev-name {
-    color: #00aaff;
-    font-weight: 600;
-    transition: color 0.3s ease;
+  color: #4dabf7;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .footer-dev .dev-name:hover {
-    color: #00ffcc;
+  color: #00e5ff;
+  text-shadow: 0 0 8px #00e5ff;
 }
 
 .footer-dev .subject {
-    color: #ffcc00;
-    font-weight: 500;
+  color: #ffeb3b;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
+
+.footer-dev .subject:hover {
+  color: #fff176;
+}
+
 
 
 /* Product Modal */
