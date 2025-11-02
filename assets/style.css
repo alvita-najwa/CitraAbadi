@@ -40,11 +40,22 @@ h1, h2, h3, h4, h5, h6 {
 /* Navbar */
 .navbar {
     background-color: var(--primary-color);
-    padding: 1rem 0;
+    padding: 1rem 2rem;
     position: sticky;
-    top: 0;
+    top: 10px; /* 🔹 beri jarak dari atas */
+    margin: 0 auto;
+    width: 95%; /* 🔹 biar sedikit ke dalam, tidak mepet pinggir layar */
+    border-radius: 15px; /* 🔹 bikin sudut melengkung */
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* 🔹 efek bayangan halus */
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(51, 51, 51, 0.95);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    border-radius: 12px;
 }
 
 .nav-container {
