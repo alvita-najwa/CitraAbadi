@@ -5,25 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact - Citra Abadi</title>
   <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/responsive.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
+  <!-- Navbar -->
+    <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
                 <img src="img/NPOTA CITRA ABADI.png" alt="Logo" class="logo-img">
                 <a href="index.html">CITRA ABADI</a>
             </div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About Us</a>
-      <a href="product.html">Product</a>
-      <a href="contact.html" class="active">Contact</a>
-      <a href="developer.html">Developer</a>
-      <a href="#" class="cart">🔍🛒</a>
-    </div>
-  </nav>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="about.html" class="nav-link active">Tentang Kami</a>
+                <a href="product.html" class="nav-link">Produk</a>
+                <a href="contact.html" class="nav-link">Kontak</a>
+                <a href="developer.html" class="nav-link">Developer</a>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Cari produk...">
+                </div>
+                <div class="cart-icon">
+                    <a href="#" id="cart-toggle">🛒 <span id="cart-count">0</span></a>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
   <!-- MAIN CONTENT -->
   <div class="container">
@@ -80,7 +93,20 @@
 </div>
 </footer>
 
-  </div>
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button id="close-cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total">
+            <p>Total: <span id="cart-total-price">Rp 0</span></p>
+            <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
+        </div>
+    </div>
 
   <!-- JAVASCRIPT -->
   <script>
