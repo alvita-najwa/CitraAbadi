@@ -3,48 +3,48 @@ const products = [
     {
         id: 1,
         name: "Banner",
-        price: 50000,
+        price: 20000,
         description: "Banner ukuran standar dengan kualitas tinggi untuk berbagai keperluan promosi.",
         image: "img/banner.jpg"
     },
     {
         id: 2,
         name: "Buku Yasin",
-        price: 15000,
-        description: "Buku Yasin dengan kertas berkualitas dan desain yang menarik.",
+        price: 8500,
+        description: "Buku Yasin dengan kertas berkualitas dan desain yang menarik, 1 pcs = Rp 8.500 .",
         image: "img/buku-yasin.jpg"
     },
     {
         id: 3,
         name: "Undangan",
-        price: 25000,
-        description: "Undangan dengan berbagai pilihan desain dan kertas berkualitas.",
+        price: 1500,
+        description: "Undangan dengan berbagai pilihan desain dan kertas berkualitas, Harga mulai dari Rp 1.500 - Rp 4.000.",
         image: "img/undangan.jpg"
     },
     {
         id: 4,
         name: "Stempel Kayu",
-        price: 75000,
-        description: "Stempel kayu dengan hasil cetak yang tajam dan tahan lama.",
+        price: 40000,
+        description: "Stempel kayu dengan hasil cetak yang tajam dan tahan lama, Harga mulai dari Rp 40.000 - Rp 50.000.",
         image: "img/stempel-kayu.jpg"
     },
     {
         id: 5,
         name: "Stempel Flash",
-        price: 100000,
-        description: "Stempel flash dengan desain modern dan praktis digunakan.",
+        price: 90000,
+        description: "Stempel flash dengan desain modern dan praktis digunakan, Harga mulai dari Rp 90.000 - Rp 150.000.",
         image: "img/stempel-flash.jpg"
     },
     {
         id: 6,
         name: "Nota",
-        price: 20000,
-        description: "Nota dengan berbagai ukuran dan kualitas kertas yang baik.",
+        price: 150000,
+        description: "Nota dengan berbagai ukuran dan kualitas kertas yang baik. 1 ply = Rp 150.000, 2 ply = Rp 290.000, 3 ply = Rp 420.000.",
         image: "img/nota.jpg"
     }
 ];
 
-// DOM Elements
+// DOM Elements (aman terhadap null)
 const navMenu = document.getElementById('nav-menu');
 const hamburger = document.getElementById('hamburger');
 const searchInput = document.getElementById('search-input');
@@ -60,23 +60,59 @@ const cartCount = document.getElementById('cart-count');
 const cartTotalPrice = document.getElementById('cart-total-price');
 const checkoutBtn = document.getElementById('checkout-btn');
 const reviewForm = document.getElementById('review-form');
-const notification = document.getElementById('notification');
 const orderForm = document.getElementById('order-form-details');
 
 // Initialize Cart
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+// Helper: Show Notification (dibuat dinamis jika tidak ada #notification)
+function showNotification(message) {
+    let notification = document.getElementById('notification');
+    
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: none;
+        `;
+        const msg = document.createElement('p');
+        msg.textContent = message;
+        notification.appendChild(msg);
+        document.body.appendChild(notification);
+    }
+    
+    const msgEl = notification.querySelector('p');
+    if (msgEl) {
+        msgEl.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+}
+
 // Toggle Mobile Menu
-hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-    hamburger.classList.toggle('active');
-});
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+}
 
 // Close Mobile Menu on Link Click
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
     });
 });
 
@@ -84,14 +120,15 @@ document.querySelectorAll('.nav-link').forEach(link => {
 if (productsGrid) {
     loadProducts(products);
     
-    // Search Functionality
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const filteredProducts = products.filter(product => 
-            product.name.toLowerCase().includes(searchTerm)
-        );
-        loadProducts(filteredProducts);
-    });
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm)
+            );
+            loadProducts(filteredProducts);
+        });
+    }
 }
 
 // Load Products to Grid
@@ -105,7 +142,7 @@ function loadProducts(productsArray) {
         productCard.className = 'product-card';
         productCard.innerHTML = `
             <div class="product-img">
-                <img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'">
+                <img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Gambar tidak tersedia</div>'">
             </div>
             <div class="product-info">
                 <h3>${product.name}</h3>
@@ -123,10 +160,12 @@ function loadProducts(productsArray) {
 
 // Show Product Detail Modal
 function showProductDetail(product) {
+    if (!modalBody || !productModal) return;
+
     modalBody.innerHTML = `
         <div class="product-detail">
             <div class="product-detail-img">
-                <img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'">
+                <img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Gambar tidak tersedia</div>'">
             </div>
             <div class="product-detail-info">
                 <h2>${product.name}</h2>
@@ -134,19 +173,19 @@ function showProductDetail(product) {
                 <p class="product-description">${product.description}</p>
                 <div class="product-form">
                     <div class="form-group">
-                        <label for="pickup-date">Tanggal Ambil</label>
-                        <input type="date" id="pickup-date" required>
+                        <label for="modal-pickup-date">Tanggal Ambil</label>
+                        <input type="date" class="modal-pickup-date" required>
                     </div>
                     <div class="form-group">
-                        <label for="pickup-time">Waktu Ambil</label>
-                        <input type="time" id="pickup-time" required>
+                        <label for="modal-pickup-time">Waktu Ambil</label>
+                        <input type="time" class="modal-pickup-time" required>
                     </div>
                     <div class="form-group">
-                        <label for="quantity">Jumlah</label>
-                        <input type="number" id="quantity" min="1" value="1" required>
+                        <label for="modal-quantity">Jumlah</label>
+                        <input type="number" class="modal-quantity" min="1" value="1" required>
                     </div>
-                    <button class="btn-primary" id="add-to-cart">Tambah ke Keranjang</button>
-                    <button class="btn-primary" id="buy-now">Beli Sekarang</button>
+                    <button class="btn-primary modal-add-to-cart">Tambah ke Keranjang</button>
+                    <button class="btn-primary modal-buy-now">Beli Sekarang</button>
                 </div>
             </div>
         </div>
@@ -155,45 +194,62 @@ function showProductDetail(product) {
     productModal.style.display = 'flex';
     
     // Add to Cart Button
-    document.getElementById('add-to-cart').addEventListener('click', () => {
-        const quantity = parseInt(document.getElementById('quantity').value);
-        const pickupDate = document.getElementById('pickup-date').value;
-        const pickupTime = document.getElementById('pickup-time').value;
-        
-        if (!pickupDate || !pickupTime) {
-            alert('Harap isi tanggal dan waktu pengambilan');
-            return;
-        }
-        
-        addToCart(product, quantity, pickupDate, pickupTime);
-        productModal.style.display = 'none';
-    });
+    const addToCartBtn = document.querySelector('.modal-add-to-cart');
+    const buyNowBtn = document.querySelector('.modal-buy-now');
     
-    // Buy Now Button
-    document.getElementById('buy-now').addEventListener('click', () => {
-        const quantity = parseInt(document.getElementById('quantity').value);
-        const pickupDate = document.getElementById('pickup-date').value;
-        const pickupTime = document.getElementById('pickup-time').value;
-        
-        if (!pickupDate || !pickupTime) {
-            alert('Harap isi tanggal dan waktu pengambilan');
-            return;
-        }
-        
-        addToCart(product, quantity, pickupDate, pickupTime);
-        productModal.style.display = 'none';
-        
-        // Scroll to order form
-        if (document.getElementById('order-form')) {
-            document.getElementById('order-form').scrollIntoView({ behavior: 'smooth' });
-        }
-    });
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', () => {
+            handleAddToCart(product);
+        });
+    }
+    
+    if (buyNowBtn) {
+        buyNowBtn.addEventListener('click', () => {
+            handleAddToCart(product);
+            productModal.style.display = 'none';
+            const orderFormEl = document.getElementById('order-form');
+            if (orderFormEl) {
+                orderFormEl.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                window.location.href = 'product.html#order-form';
+            }
+        });
+    }
+}
+
+function handleAddToCart(product) {
+    const pickupDateInput = document.querySelector('.modal-pickup-date');
+    const pickupTimeInput = document.querySelector('.modal-pickup-time');
+    const quantityInput = document.querySelector('.modal-quantity');
+    
+    if (!pickupDateInput || !pickupTimeInput || !quantityInput) return;
+    
+    const pickupDate = pickupDateInput.value;
+    const pickupTime = pickupTimeInput.value;
+    const quantity = parseInt(quantityInput.value) || 1;
+    
+    if (!pickupDate || !pickupTime) {
+        showNotification('Harap isi tanggal dan waktu pengambilan');
+        return;
+    }
+
+    const now = new Date();
+    const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
+    if (selectedDateTime < now) {
+        showNotification('Tanggal dan waktu tidak boleh di masa lalu');
+        return;
+    }
+
+    addToCart(product, quantity, pickupDate, pickupTime);
+    showNotification('Produk berhasil ditambahkan ke keranjang');
 }
 
 // Close Modal
-closeModal.addEventListener('click', () => {
-    productModal.style.display = 'none';
-});
+if (closeModal && productModal) {
+    closeModal.addEventListener('click', () => {
+        productModal.style.display = 'none';
+    });
+}
 
 // Close Modal when clicking outside
 window.addEventListener('click', (e) => {
@@ -203,15 +259,19 @@ window.addEventListener('click', (e) => {
 });
 
 // Cart Functionality
-cartToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    cartSidebar.classList.add('active');
-    updateCartDisplay();
-});
+if (cartToggle && cartSidebar) {
+    cartToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        cartSidebar.classList.add('active');
+        updateCartDisplay();
+    });
+}
 
-closeCart.addEventListener('click', () => {
-    cartSidebar.classList.remove('active');
-});
+if (closeCart && cartSidebar) {
+    closeCart.addEventListener('click', () => {
+        cartSidebar.classList.remove('active');
+    });
+}
 
 // Add to Cart
 function addToCart(product, quantity, pickupDate, pickupTime) {
@@ -234,18 +294,19 @@ function addToCart(product, quantity, pickupDate, pickupTime) {
     
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-    showNotification('Produk berhasil ditambahkan ke keranjang');
 }
 
 // Update Cart Count
 function updateCartCount() {
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-    cartCount.textContent = totalItems;
+    if (cartCount) {
+        cartCount.textContent = totalItems;
+    }
 }
 
 // Update Cart Display
 function updateCartDisplay() {
-    if (!cartItems) return;
+    if (!cartItems || !cartTotalPrice) return;
     
     cartItems.innerHTML = '';
     
@@ -257,7 +318,7 @@ function updateCartDisplay() {
     
     let totalPrice = 0;
     
-    cart.forEach((item, index) => {
+    cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         totalPrice += itemTotal;
         
@@ -270,7 +331,10 @@ function updateCartDisplay() {
                 <p>Ambil: ${item.pickupDate} ${item.pickupTime}</p>
             </div>
             <div class="cart-item-actions">
-                <button class="remove-item" data-index="${index}">❌</button>
+                <button class="remove-item" 
+                        data-id="${item.id}"
+                        data-date="${item.pickupDate}"
+                        data-time="${item.pickupTime}">❌</button>
             </div>
         `;
         
@@ -282,8 +346,14 @@ function updateCartDisplay() {
     // Add event listeners to remove buttons
     document.querySelectorAll('.remove-item').forEach(button => {
         button.addEventListener('click', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            cart.splice(index, 1);
+            const id = parseInt(e.target.dataset.id);
+            const date = e.target.dataset.date;
+            const time = e.target.dataset.time;
+
+            cart = cart.filter(item => 
+                !(item.id === id && item.pickupDate === date && item.pickupTime === time)
+            );
+
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
             updateCartDisplay();
@@ -295,13 +365,14 @@ function updateCartDisplay() {
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) {
-            alert('Keranjang belanja kosong');
+            showNotification('Keranjang belanja kosong');
             return;
         }
         
-        if (document.getElementById('order-form')) {
-            document.getElementById('order-form').scrollIntoView({ behavior: 'smooth' });
-            cartSidebar.classList.remove('active');
+        const orderFormEl = document.getElementById('order-form');
+        if (orderFormEl) {
+            orderFormEl.scrollIntoView({ behavior: 'smooth' });
+            if (cartSidebar) cartSidebar.classList.remove('active');
         } else {
             window.location.href = 'product.html#order-form';
         }
@@ -313,17 +384,17 @@ if (reviewForm) {
     reviewForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const name = document.getElementById('review-name').value;
-        const email = document.getElementById('review-email').value;
-        const message = document.getElementById('review-message').value;
+        const name = document.getElementById('review-name')?.value;
+        const email = document.getElementById('review-email')?.value;
+        const message = document.getElementById('review-message')?.value;
         
-        // In a real application, you would send this data to a server
+        if (!name || !email || !message) {
+            showNotification('Semua kolom ulasan harus diisi');
+            return;
+        }
+        
         console.log('Review submitted:', { name, email, message });
-        
-        // Show notification
         showNotification('Terima kasih atas ulasan Anda!');
-        
-        // Reset form
         reviewForm.reset();
     });
 }
@@ -333,104 +404,82 @@ if (orderForm) {
     orderForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const name = document.getElementById('customer-name').value;
-        const phone = document.getElementById('customer-phone').value;
-        const pickupDate = document.getElementById('pickup-date').value;
-        const pickupTime = document.getElementById('pickup-time').value;
-        const notes = document.getElementById('notes').value;
+        const name = document.getElementById('customer-name')?.value;
+        const phone = document.getElementById('customer-phone')?.value;
         
-        // In a real application, you would send this data to a server
-        console.log('Order submitted:', { name, phone, pickupDate, pickupTime, notes, cart });
+        if (!name || !phone) {
+            showNotification('Nama dan nomor telepon wajib diisi');
+            return;
+        }
+
+        console.log('Order submitted:', { name, phone, cart });
         
-        // Show confirmation
-        alert('Pesanan Anda telah berhasil dikonfirmasi!');
+        showNotification('Pesanan Anda telah berhasil dikonfirmasi!');
         
         // Clear cart
         cart = [];
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
         
-        // Reset form
         orderForm.reset();
-        
-        // Redirect to home page
         window.location.href = 'index.html';
     });
-}
-
-// Show Notification
-function showNotification(message) {
-    if (!notification) return;
-    
-    notification.querySelector('p').textContent = message;
-    notification.style.display = 'block';
-    
-    setTimeout(() => {
-        notification.style.display = 'none';
-    }, 3000);
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
-    
-    // If on product page, update cart display
     if (cartItems) {
         updateCartDisplay();
     }
 });
 
+// ========== ANIMASI & INTERAKSI TAMBAHAN DARI CODINGAN 1 ==========
+
 // Navbar scroll + animasi fitur + animasi umum
 window.addEventListener("scroll", () => {
-  const navbar = document.querySelector(".navbar");
-  const featureItems = document.querySelectorAll(".feature-item");
-  const animatables = document.querySelectorAll("[data-animate]");
+    const navbar = document.querySelector(".navbar");
+    const featureItems = document.querySelectorAll(".feature-item");
+    const animatables = document.querySelectorAll("[data-animate]");
 
-  // Navbar scroll effect
-  if (navbar) navbar.classList.toggle("scrolled", window.scrollY > 50);
+    if (navbar) navbar.classList.toggle("scrolled", window.scrollY > 50);
 
-  // Animasi fitur
-  featureItems.forEach(item => {
-    if (item.getBoundingClientRect().top < window.innerHeight - 100) {
-      item.classList.add("visible");
-    }
-  });
+    featureItems.forEach(item => {
+        if (item.getBoundingClientRect().top < window.innerHeight - 100) {
+            item.classList.add("visible");
+        }
+    });
 
-  // Efek muncul umum
-  animatables.forEach(el => {
-    if (el.getBoundingClientRect().top < window.innerHeight - 80) {
-      el.classList.add("visible");
-    }
-  });
+    animatables.forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 80) {
+            el.classList.add("visible");
+        }
+    });
 });
 
-// Smooth scroll link
+// Smooth scroll untuk semua link anchor
 document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    document.querySelector(link.getAttribute("href")).scrollIntoView({
-      behavior: "smooth"
+    link.addEventListener("click", e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+        }
     });
-  });
 });
 
 // Hero fade saat load
 window.addEventListener("load", () => {
-  const hero = document.querySelector(".hero");
-  if (hero) hero.classList.add("fade-in");
+    const hero = document.querySelector(".hero");
+    if (hero) hero.classList.add("fade-in");
 });
-<!-- JAVASCRIPT -->
-  <script>
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Terima kasih atas ulasan Anda!');
-      this.reset();
-    });
-// contact
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Terima kasih atas ulasan Anda!');
-      this.reset();
-    });
-  </script>
 
+// Contact Form (pastikan hanya sekali)
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        showNotification('Terima kasih atas pesan Anda!');
+        this.reset();
+    });
+}
