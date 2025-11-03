@@ -173,6 +173,14 @@ function showProductDetail(product) {
                 <p class="product-description">${product.description}</p>
                 <div class="product-form">
                     <div class="form-group">
+                        <label for="modal-name">Nama Lengkap</label>
+                        <input type="text" class="modal-name" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-phone">Nomor WhatsApp</label>
+                        <input type="tel" class="modal-phone" placeholder="081234567890" required>
+                    </div>
+                    <div class="form-group">
                         <label for="modal-pickup-date">Tanggal Ambil</label>
                         <input type="date" class="modal-pickup-date" required>
                     </div>
@@ -184,8 +192,12 @@ function showProductDetail(product) {
                         <label for="modal-quantity">Jumlah</label>
                         <input type="number" class="modal-quantity" min="1" value="1" required>
                     </div>
+                    <div class="form-group">
+                        <label for="modal-notes">Catatan (Opsional)</label>
+                        <textarea class="modal-notes" placeholder="Warna, ukuran, dll."></textarea>
+                    </div>
                     <button class="btn-primary modal-add-to-cart">Tambah ke Keranjang</button>
-                    <button class="btn-primary modal-buy-now">Beli Sekarang</button>
+                    <button class="btn-primary modal-buy-now-whatsapp">Beli Sekarang via WhatsApp</button>
                 </div>
             </div>
         </div>
@@ -193,26 +205,58 @@ function showProductDetail(product) {
     
     productModal.style.display = 'flex';
     
-    // Add to Cart Button
+    // Tambah ke Keranjang
     const addToCartBtn = document.querySelector('.modal-add-to-cart');
-    const buyNowBtn = document.querySelector('.modal-buy-now');
-    
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', () => {
             handleAddToCart(product);
         });
     }
-    
-    if (buyNowBtn) {
-        buyNowBtn.addEventListener('click', () => {
-            handleAddToCart(product);
-            productModal.style.display = 'none';
-            const orderFormEl = document.getElementById('order-form');
-            if (orderFormEl) {
-                orderFormEl.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                window.location.href = 'product.html#order-form';
+
+    // Beli Sekarang via WhatsApp
+    const buyNowWA = document.querySelector('.modal-buy-now-whatsapp');
+    if (buyNowWA) {
+        buyNowWA.addEventListener('click', () => {
+            const name = document.querySelector('.modal-name')?.value?.trim();
+            const phone = document.querySelector('.modal-phone')?.value?.replace(/\D/g, ''); // Hanya angka
+            const pickupDate = document.querySelector('.modal-pickup-date')?.value;
+            const pickupTime = document.querySelector('.modal-pickup-time')?.value;
+            const quantity = parseInt(document.querySelector('.modal-quantity')?.value) || 1;
+            const notes = document.querySelector('.modal-notes')?.value?.trim() || '-';
+
+            if (!name || !phone || !pickupDate || !pickupTime) {
+                showNotification('Harap lengkapi semua data wajib!');
+                return;
             }
+
+            if (phone.length < 10) {
+                showNotification('Nomor WhatsApp tidak valid!');
+                return;
+            }
+
+            const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
+            if (selectedDateTime < new Date()) {
+                showNotification('Tanggal dan waktu tidak boleh di masa lalu!');
+                return;
+            }
+
+            const dateObj = new Date(pickupDate);
+            const indonesianDate = dateObj.toLocaleDateString('id-ID');
+
+            const message = `Halo, saya ingin pesan *${product.name}* sebanyak *${quantity} pcs*.\n` +
+                            `Tanggal ambil: ${indonesianDate}\n` +
+                            `Waktu ambil: ${pickupTime}\n` +
+                            `Catatan: ${notes}\n\n` +
+                            `Nama: ${name}\n` +
+                            `No HP: ${phone}`;
+
+            // GANTI DENGAN NOMOR WHATSAPP ANDA (format internasional tanpa +)
+            const whatsappNumber = '6281335997984'; // ← SESUAIKAN!
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/6281335997984${whatsappNumber}?text=${encodedMessage}`;
+
+            productModal.style.display = 'none';
+            window.open(whatsappUrl, '_blank');
         });
     }
 }
@@ -434,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ========== ANIMASI & INTERAKSI TAMBAHAN DARI CODINGAN 1 ==========
+// ========== ANIMASI & INTERAKSI TAMBAHAN ==========
 
 // Navbar scroll + animasi fitur + animasi umum
 window.addEventListener("scroll", () => {
@@ -474,7 +518,7 @@ window.addEventListener("load", () => {
     if (hero) hero.classList.add("fade-in");
 });
 
-// Contact Form (pastikan hanya sekali)
+// Contact Form
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
