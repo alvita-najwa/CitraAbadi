@@ -197,7 +197,7 @@ function showProductDetail(product) {
                         <textarea class="modal-notes" placeholder="Warna, ukuran, dll."></textarea>
                     </div>
                     <button class="btn-primary modal-add-to-cart">Tambah ke Keranjang</button>
-                    <button class="btn-primary modal-buy-now-whatsapp">Beli Sekarang via WhatsApp</button>
+                    <button class="btn-primary modal-buy-now-whatsapp">Beli Sekarang</button>
                 </div>
             </div>
         </div>
