@@ -253,7 +253,7 @@ function showProductDetail(product) {
             // GANTI DENGAN NOMOR WHATSAPP ANDA (format internasional tanpa +)
             const whatsappNumber = '6281335997984'; // ← SESUAIKAN!
             const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/6281335997984${whatsappNumber}?text=${encodedMessage}`;
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
             productModal.style.display = 'none';
             window.open(whatsappUrl, '_blank');
