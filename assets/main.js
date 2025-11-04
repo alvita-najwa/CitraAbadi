@@ -213,7 +213,7 @@ function showProductDetail(product) {
                             <textarea class="modal-address" placeholder="Link Alamat Anda" required></textarea>
                         </div>
                         <div class="form-group">
-                            <a href="https://maps.app.goo.gl/jSrmdBZgkyBFtcar9" target="_blank" style="color:#1e90ff;text-decoration:underline;">Lihat Lokasi Toko</a>
+                            <a href="https://maps.app.goo.gl/akf3aTENEpyTFo1A6" target="_blank" style="color:#1e90ff;text-decoration:underline;">Lihat Lokasi Toko</a>
                         </div>
                     </div>
 
