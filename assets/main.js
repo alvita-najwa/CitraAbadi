@@ -340,6 +340,7 @@ function showProductDetail(product) {
             // GANTI DENGAN NOMOR WHATSAPP ANDA (format internasional tanpa +)
             const whatsappNumber = '6281335997984'; // ← SESUAIKAN!
             const encodedMessage = encodeURIComponent(message);
+            // ✅ DIPERBAIKI: HAPUS SPASI BERLEBIH
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
             productModal.style.display = 'none';
@@ -435,7 +436,7 @@ function updateCartCount() {
     }
 }
 
-// Update Cart Display
+// ✅ UPDATE: Tambahkan tombol "Beli via WA" di setiap item keranjang
 function updateCartDisplay() {
     if (!cartItems || !cartTotalPrice) return;
     
@@ -462,6 +463,14 @@ function updateCartDisplay() {
                 <p>Ambil: ${item.pickupDate} ${item.pickupTime}</p>
             </div>
             <div class="cart-item-actions">
+                <button class="buy-now-wa-cart btn-primary" 
+                        data-id="${item.id}"
+                        data-name="${item.name}"
+                        data-price="${item.price}"
+                        data-quantity="${item.quantity}"
+                        data-date="${item.pickupDate}"
+                        data-time="${item.pickupTime}"
+                        style="margin-bottom:6px;padding:6px 10px;font-size:12px;">Beli via WA</button>
                 <button class="remove-item" 
                         data-id="${item.id}"
                         data-date="${item.pickupDate}"
@@ -474,7 +483,7 @@ function updateCartDisplay() {
     
     cartTotalPrice.textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
     
-    // Add event listeners to remove buttons
+    // Hapus item
     document.querySelectorAll('.remove-item').forEach(button => {
         button.addEventListener('click', (e) => {
             const id = parseInt(e.target.dataset.id);
@@ -488,6 +497,32 @@ function updateCartDisplay() {
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
             updateCartDisplay();
+        });
+    });
+
+    // ✅ BELI LANGSUNG VIA WA DARI KERANJANG
+    document.querySelectorAll('.buy-now-wa-cart').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const name = e.target.dataset.name;
+            const quantity = e.target.dataset.quantity;
+            const pickupDate = e.target.dataset.date;
+            const pickupTime = e.target.dataset.time;
+
+            const dateObj = new Date(pickupDate);
+            const indonesianDate = dateObj.toLocaleDateString('id-ID');
+
+            const message = `Halo, saya ingin pesan *${name}* sebanyak *${quantity} pcs*.\n` +
+                            `Tanggal ambil: ${indonesianDate}\n` +
+                            `Waktu ambil: ${pickupTime}\n` +
+                            `Metode pembayaran: COD (Bayar di Tempat)\n\n` +
+                            `Nama: [ISI NAMA ANDA]\n` +
+                            `No HP: [ISI NOMOR ANDA]`;
+
+            const whatsappNumber = '6281335997984';
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
         });
     });
 }
