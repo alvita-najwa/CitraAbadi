@@ -217,7 +217,7 @@ function showProductDetail(product) {
                     </div>
                     <div class="form-group">
                         <label for="modal-notes">Catatan (Opsional)</label>
-                        <textarea class="modal-notes" placeholder="Warna, ukuran, dll."></textarea>
+                        <textarea class="modal-notes" placeholder="Desain, ukuran, dll."></textarea>
                     </div>
 
                     <!-- Pilihan Pembayaran -->
