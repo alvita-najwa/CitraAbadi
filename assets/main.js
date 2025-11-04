@@ -183,9 +183,15 @@ function showProductDetail(product) {
 
                     <!-- Pilihan Pengiriman -->
                     <div class="form-group">
-                        <label>Pengiriman</label><br>
-                        <label><input type="radio" name="modal-delivery" class="modal-delivery" value="pickup" checked> Diambil</label>
-                        <label><input type="radio" name="modal-delivery" class="modal-delivery" value="delivery"> Diantar</label>
+                        <label style="display:block;margin-bottom:6px;font-weight:bold;">Pengiriman</label>
+                        <label style="display:flex;align-items:center;margin-bottom:6px;cursor:pointer;">
+                            <input type="radio" name="modal-delivery" class="modal-delivery" value="pickup" checked style="margin:0;transform:scale(1.15);">
+                            <span style="margin-left:8px;">Diambil</span>
+                        </label>
+                        <label style="display:flex;align-items:center;cursor:pointer;">
+                            <input type="radio" name="modal-delivery" class="modal-delivery" value="delivery" style="margin:0;transform:scale(1.15);">
+                            <span style="margin-left:8px;">Diantar</span>
+                        </label>
                     </div>
 
                     <!-- Tanggal & Waktu Ambil -->
@@ -204,10 +210,10 @@ function showProductDetail(product) {
                     <div class="delivery-fields" style="display:none;">
                         <div class="form-group">
                             <label for="modal-address">Alamat Lengkap</label>
-                            <textarea class="modal-address" placeholder="Contoh: Jl. Merdeka No. 123, RT 01/RW 02, Kel. ABC, Kec. XYZ, Kota Bandung" required></textarea>
+                            <textarea class="modal-address" placeholder="Contoh: Jl. Merdeka No. 123, RT 01/RW 02, Kel. ABC, Kec. XYZ, Kota Bandung" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;"></textarea>
                         </div>
                         <div class="form-group">
-                            <a href="https://maps.app.goo.gl/TOKO_ANDA" target="_blank" style="color:#1e90ff; text-decoration:underline;">Lihat Lokasi Toko</a>
+                            <a href="https://maps.app.goo.gl/TOKO_ANDA" target="_blank" style="color:#1e90ff;text-decoration:underline;display:inline-block;margin-top:4px;">Lihat Lokasi Toko</a>
                         </div>
                     </div>
 
@@ -217,18 +223,24 @@ function showProductDetail(product) {
                     </div>
                     <div class="form-group">
                         <label for="modal-notes">Catatan (Opsional)</label>
-                        <textarea class="modal-notes" placeholder="Warna, ukuran, dll."></textarea>
+                        <textarea class="modal-notes" placeholder="Warna, ukuran, dll." style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;"></textarea>
                     </div>
 
                     <!-- Pilihan Pembayaran -->
                     <div class="form-group">
-                        <label>Metode Pembayaran</label><br>
-                        <label><input type="radio" name="modal-payment" class="modal-payment" value="cod" checked> COD (Bayar di Tempat)</label>
-                        <label><input type="radio" name="modal-payment" class="modal-payment" value="transfer"> Transfer Bank</label>
+                        <label style="display:block;margin-bottom:6px;font-weight:bold;">Metode Pembayaran</label>
+                        <label style="display:flex;align-items:center;margin-bottom:6px;cursor:pointer;">
+                            <input type="radio" name="modal-payment" class="modal-payment" value="cod" checked style="margin:0;transform:scale(1.15);">
+                            <span style="margin-left:8px;">COD (Bayar di Tempat)</span>
+                        </label>
+                        <label style="display:flex;align-items:center;cursor:pointer;">
+                            <input type="radio" name="modal-payment" class="modal-payment" value="transfer" style="margin:0;transform:scale(1.15);">
+                            <span style="margin-left:8px;">Transfer Bank</span>
+                        </label>
                     </div>
 
-                    <button class="btn-primary modal-add-to-cart">Tambah ke Keranjang</button>
-                    <button class="btn-primary modal-buy-now-whatsapp">Beli Sekarang</button>
+                    <button class="btn-primary modal-add-to-cart" style="margin-top:12px;margin-right:8px;">Tambah ke Keranjang</button>
+                    <button class="btn-primary modal-buy-now-whatsapp" style="margin-top:12px;">Beli Sekarang</button>
                 </div>
             </div>
         </div>
@@ -236,7 +248,7 @@ function showProductDetail(product) {
     
     productModal.style.display = 'flex';
 
-    // Toggle tampilan field berdasarkan pilihan pengiriman
+    // Toggle tampilan berdasarkan pilihan pengiriman
     const deliveryRadios = document.querySelectorAll('.modal-delivery');
     const pickupFields = document.querySelector('.pickup-fields');
     const deliveryFields = document.querySelector('.delivery-fields');
@@ -319,7 +331,7 @@ function showProductDetail(product) {
                             `Nama: ${name}\n` +
                             `No HP: ${phone}`;
 
-            const whatsappNumber = '6281335997984'; // ← GANTI SESUAI KEBUTUHAN
+            const whatsappNumber = '6281335997984'; // ← GANTI DENGAN NOMORMU
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
