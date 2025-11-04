@@ -229,7 +229,7 @@ function showProductDetail(product) {
                     <!-- Pilihan Pembayaran -->
                     <div class="form-group">
                         <label>Metode Pembayaran</label>
-                        <label style="display:flex;align-items:center;;cursor:pointer;margin-top:6px;">
+                        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:6px;">
                             <span style="text-align:left;flex:1;">COD (Bayar di Tempat)</span>
                             <input type="radio" name="modal-payment" class="modal-payment" value="cod" checked>
                         </label>
