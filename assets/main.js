@@ -44,7 +44,7 @@ const products = [
     }
 ];
 
-// DOM Elements (aman terhadap null)
+// DOM Elements
 const navMenu = document.getElementById('nav-menu');
 const hamburger = document.getElementById('hamburger');
 const searchInput = document.getElementById('search-input');
@@ -62,417 +62,320 @@ const checkoutBtn = document.getElementById('checkout-btn');
 const reviewForm = document.getElementById('review-form');
 const orderForm = document.getElementById('order-form-details');
 
-// Initialize Cart
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 // Helper: Show Notification
 function showNotification(message) {
-    let notification = document.getElementById('notification');
-    
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.id = 'notification';
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 4px;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            display: none;
-        `;
-        const msg = document.createElement('p');
-        msg.textContent = message;
-        notification.appendChild(msg);
-        document.body.appendChild(notification);
+    let el = document.getElementById('notif-toast');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'notif-toast';
+        Object.assign(el.style, {
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: '#4CAF50',
+            color: 'white',
+            padding: '12px 20px',
+            borderRadius: '4px',
+            zIndex: '10000',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+            display: 'none',
+            fontSize: '14px'
+        });
+        document.body.appendChild(el);
     }
-    
-    const msgEl = notification.querySelector('p');
-    if (msgEl) {
-        msgEl.textContent = message;
-        notification.style.display = 'block';
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
-    }
+    el.textContent = message;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 3000);
 }
 
-// Toggle Mobile Menu
+// Mobile menu toggle
 if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
         navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
     });
 }
-
-// Close Mobile Menu on Link Click
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-        if (navMenu) navMenu.classList.remove('active');
-        if (hamburger) hamburger.classList.remove('active');
+        navMenu?.classList.remove('active');
+        hamburger?.classList.remove('active');
     });
 });
 
-// Load Products on Product Page
+// Load products
 if (productsGrid) {
     loadProducts(products);
-    
     if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredProducts = products.filter(product => 
-                product.name.toLowerCase().includes(searchTerm)
-            );
-            loadProducts(filteredProducts);
+        searchInput.addEventListener('input', e => {
+            const term = e.target.value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            loadProducts(filtered);
         });
     }
 }
 
-// Load Products to Grid
-function loadProducts(productsArray) {
+function loadProducts(arr) {
     if (!productsGrid) return;
-    
     productsGrid.innerHTML = '';
-    
-    productsArray.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
-        productCard.innerHTML = `
+    arr.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
             <div class="product-img">
-                <img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Gambar tidak tersedia</div>'">
+                <img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Gambar tidak tersedia</div>'">
             </div>
             <div class="product-info">
-                <h3>${product.name}</h3>
-                <p>Rp ${product.price.toLocaleString('id-ID')}</p>
+                <h3>${p.name}</h3>
+                <p>Rp ${p.price.toLocaleString('id-ID')}</p>
             </div>
         `;
-        
-        productCard.addEventListener('click', () => {
-            showProductDetail(product);
-        });
-        
-        productsGrid.appendChild(productCard);
+        card.addEventListener('click', () => showProductDetail(p));
+        productsGrid.appendChild(card);
     });
 }
 
-// Show Product Detail Modal
 function showProductDetail(product) {
     if (!modalBody || !productModal) return;
 
     modalBody.innerHTML = `
-        <div class="product-detail">
-            <div class="product-detail-img">
-                <img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Gambar tidak tersedia</div>'">
+        <div class="product-detail" style="display:flex;gap:20px;max-width:800px;">
+            <div class="product-detail-img" style="flex:1;min-width:200px;">
+                <img src="${product.image}" alt="${product.name}" 
+                    style="width:100%;height:auto;border-radius:8px;object-fit:cover;"
+                    onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:200px;background:#f0f0f0;color:#666;border-radius:8px;\'>Gambar tidak tersedia</div>'">
             </div>
-            <div class="product-detail-info">
-                <h2>${product.name}</h2>
-                <p class="product-price">Rp ${product.price.toLocaleString('id-ID')}</p>
-                <p class="product-description">${product.description}</p>
-                <div class="product-form">
-                    <div class="form-group">
-                        <label for="modal-name">Nama Lengkap</label>
-                        <input type="text" class="modal-name" placeholder="Nama Anda" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
-                    </div>
-                    <div class="form-group">
-                        <label for="modal-phone">Nomor WhatsApp</label>
-                        <input type="tel" class="modal-phone" placeholder="081234567890" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+            <div class="product-detail-info" style="flex:2;">
+                <h2 style="margin:0 0 12px 0;">${product.name}</h2>
+                <p style="color:#e74c3c;font-weight:bold;margin:0 0 16px 0;">Rp ${product.price.toLocaleString('id-ID')}</p>
+                <p style="margin:0 0 20px 0;color:#555;">${product.description}</p>
+
+                <div class="product-form" style="display:flex;flex-direction:column;gap:16px;">
+                    <!-- Nama -->
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Nama Lengkap</label>
+                        <input type="text" class="modal-name" placeholder="Nama Anda" required
+                            style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;">
                     </div>
 
-                    <!-- Pilihan Pengiriman -->
-                    <div class="form-group">
-                        <label style="display:block;margin-bottom:8px;font-weight:bold;">Pengiriman</label>
-                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
-                            <span>Diambil</span>
-                            <input type="radio" name="modal-delivery" class="modal-delivery" value="pickup" checked style="margin:0;transform:scale(1.15);">
-                        </label>
-                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
-                            <span>Diantar</span>
-                            <input type="radio" name="modal-delivery" class="modal-delivery" value="delivery" style="margin:0;transform:scale(1.15);">
-                        </label>
+                    <!-- WhatsApp -->
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Nomor WhatsApp</label>
+                        <input type="tel" class="modal-phone" placeholder="081234567890" required
+                            style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;">
+                    </div>
+
+                    <!-- Pengiriman -->
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-size:14px;font-weight:600;">Pengiriman</label>
+                        <div style="display:flex;flex-direction:column;gap:8px;">
+                            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                                <span style="flex:1;text-align:left;">Diambil</span>
+                                <input type="radio" name="delivery" value="pickup" checked style="margin:0;transform:scale(1.2);">
+                            </label>
+                            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                                <span style="flex:1;text-align:left;">Diantar</span>
+                                <input type="radio" name="delivery" value="delivery" style="margin:0;transform:scale(1.2);">
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Tanggal & Waktu Ambil -->
                     <div class="pickup-fields">
-                        <div class="form-group">
-                            <label for="modal-pickup-date">Tanggal Ambil</label>
-                            <input type="date" class="modal-pickup-date" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+                        <div>
+                            <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Tanggal Ambil</label>
+                            <input type="date" class="modal-pickup-date" required
+                                style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;">
                         </div>
-                        <div class="form-group">
-                            <label for="modal-pickup-time">Waktu Ambil</label>
-                            <input type="time" class="modal-pickup-time" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+                        <div>
+                            <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Waktu Ambil</label>
+                            <input type="time" class="modal-pickup-time" required
+                                style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;">
                         </div>
                     </div>
 
-                    <!-- Alamat Pengiriman -->
+                    <!-- Alamat (sembunyi default) -->
                     <div class="delivery-fields" style="display:none;">
-                        <div class="form-group">
-                            <label for="modal-address">Alamat Lengkap</label>
-                            <textarea class="modal-address" placeholder="Contoh: Jl. Merdeka No. 123, RT 01/RW 02, Kel. ABC, Kec. XYZ, Kota Bandung" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;"></textarea>
+                        <div>
+                            <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Alamat Lengkap</label>
+                            <textarea class="modal-address" placeholder="Contoh: Jl. Merdeka No. 123..." required
+                                style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;height:80px;"></textarea>
                         </div>
-                        <div class="form-group">
-                            <a href="https://maps.app.goo.gl/TOKO_ANDA" target="_blank" style="color:#1e90ff;text-decoration:underline;display:inline-block;margin-top:4px;">Lihat Lokasi Toko</a>
+                        <div>
+                            <a href="https://maps.app.goo.gl/GANTI_DENGAN_LINK_ANDA" target="_blank"
+                                style="color:#1e88e5;text-decoration:underline;font-size:14px;display:inline-block;margin-top:4px;">
+                                Lihat Lokasi Toko
+                            </a>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="modal-quantity">Jumlah</label>
-                        <input type="number" class="modal-quantity" min="1" value="1" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
-                    </div>
-                    <div class="form-group">
-                        <label for="modal-notes">Catatan (Opsional)</label>
-                        <textarea class="modal-notes" placeholder="Warna, ukuran, dll." style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;"></textarea>
+                    <!-- Jumlah -->
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Jumlah</label>
+                        <input type="number" class="modal-quantity" min="1" value="1" required
+                            style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;">
                     </div>
 
-                    <!-- Pilihan Pembayaran -->
-                    <div class="form-group">
-                        <label style="display:block;margin-bottom:8px;font-weight:bold;">Metode Pembayaran</label>
-                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
-                            <span>COD (Bayar di Tempat)</span>
-                            <input type="radio" name="modal-payment" class="modal-payment" value="cod" checked style="margin:0;transform:scale(1.15);">
-                        </label>
-                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
-                            <span>Transfer Bank</span>
-                            <input type="radio" name="modal-payment" class="modal-payment" value="transfer" style="margin:0;transform:scale(1.15);">
-                        </label>
+                    <!-- Catatan -->
+                    <div>
+                        <label style="display:block;margin-bottom:6px;font-size:14px;font-weight:600;">Catatan (Opsional)</label>
+                        <textarea class="modal-notes" placeholder="Warna, ukuran, dll."
+                            style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;height:60px;"></textarea>
                     </div>
 
-                    <button class="btn-primary modal-add-to-cart" style="margin-top:16px;margin-right:8px;padding:10px 16px;border:none;background:#1e90ff;color:white;border-radius:4px;cursor:pointer;">Tambah ke Keranjang</button>
-                    <button class="btn-primary modal-buy-now-whatsapp" style="margin-top:16px;padding:10px 16px;border:none;background:#25D366;color:white;border-radius:4px;cursor:pointer;">Beli Sekarang</button>
+                    <!-- Pembayaran -->
+                    <div>
+                        <label style="display:block;margin-bottom:8px;font-size:14px;font-weight:600;">Metode Pembayaran</label>
+                        <div style="display:flex;flex-direction:column;gap:8px;">
+                            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                                <span style="flex:1;text-align:left;">COD (Bayar di Tempat)</span>
+                                <input type="radio" name="payment" value="cod" checked style="margin:0;transform:scale(1.2);">
+                            </label>
+                            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                                <span style="flex:1;text-align:left;">Transfer Bank</span>
+                                <input type="radio" name="payment" value="transfer" style="margin:0;transform:scale(1.2);">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Tombol -->
+                    <div style="display:flex;gap:10px;margin-top:10px;">
+                        <button class="modal-add-to-cart"
+                            style="flex:1;padding:12px;background:#3498db;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+                            Tambah ke Keranjang
+                        </button>
+                        <button class="modal-buy-now-whatsapp"
+                            style="flex:1;padding:12px;background:#25D366;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+                            Beli Sekarang
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     `;
-    
+
     productModal.style.display = 'flex';
+    productModal.style.justifyContent = 'center';
+    productModal.style.alignItems = 'center';
+    productModal.style.padding = '20px';
 
-    // Toggle tampilan berdasarkan pilihan pengiriman
-    const deliveryRadios = document.querySelectorAll('.modal-delivery');
-    const pickupFields = document.querySelector('.pickup-fields');
-    const deliveryFields = document.querySelector('.delivery-fields');
+    // Toggle fields
+    const radios = document.querySelectorAll('input[name="delivery"]');
+    const pickupDiv = document.querySelector('.pickup-fields');
+    const deliveryDiv = document.querySelector('.delivery-fields');
 
-    deliveryRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.value === 'pickup') {
-                pickupFields.style.display = 'block';
-                deliveryFields.style.display = 'none';
+    radios.forEach(r => {
+        r.addEventListener('change', () => {
+            if (r.value === 'pickup') {
+                pickupDiv.style.display = 'block';
+                deliveryDiv.style.display = 'none';
             } else {
-                pickupFields.style.display = 'none';
-                deliveryFields.style.display = 'block';
+                pickupDiv.style.display = 'none';
+                deliveryDiv.style.display = 'block';
             }
         });
     });
 
-    // Tambah ke Keranjang
-    const addToCartBtn = document.querySelector('.modal-add-to-cart');
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', () => {
-            handleAddToCart(product);
-        });
-    }
+    // Tambah ke keranjang
+    document.querySelector('.modal-add-to-cart')?.addEventListener('click', () => {
+        const date = document.querySelector('.modal-pickup-date')?.value;
+        const time = document.querySelector('.modal-pickup-time')?.value;
+        const qty = parseInt(document.querySelector('.modal-quantity')?.value) || 1;
+        if (!date || !time) return showNotification('Isi tanggal & waktu ambil');
+        if (new Date(`${date}T${time}`) < new Date()) return showNotification('Waktu tidak boleh di masa lalu');
+        addToCart(product, qty, date, time);
+        showNotification('✅ Ditambahkan ke keranjang!');
+    });
 
-    // Beli Sekarang via WhatsApp
-    const buyNowWA = document.querySelector('.modal-buy-now-whatsapp');
-    if (buyNowWA) {
-        buyNowWA.addEventListener('click', () => {
-            const name = document.querySelector('.modal-name')?.value?.trim();
-            const phone = document.querySelector('.modal-phone')?.value?.replace(/\D/g, '');
-            const deliveryMethod = document.querySelector('input[name="modal-delivery"]:checked')?.value;
-            const paymentMethod = document.querySelector('input[name="modal-payment"]:checked')?.value;
-            const quantity = parseInt(document.querySelector('.modal-quantity')?.value) || 1;
-            const notes = document.querySelector('.modal-notes')?.value?.trim() || '-';
+    // Beli via WhatsApp
+    document.querySelector('.modal-buy-now-whatsapp')?.addEventListener('click', () => {
+        const name = document.querySelector('.modal-name')?.value?.trim();
+        const phone = document.querySelector('.modal-phone')?.value?.replace(/\D/g, '');
+        const delivery = document.querySelector('input[name="delivery"]:checked')?.value;
+        const payment = document.querySelector('input[name="payment"]:checked')?.value;
+        const qty = parseInt(document.querySelector('.modal-quantity')?.value) || 1;
+        const notes = document.querySelector('.modal-notes')?.value?.trim() || '-';
 
-            if (!name || !phone) {
-                showNotification('Harap lengkapi nama dan nomor WhatsApp!');
-                return;
-            }
+        if (!name || !phone || phone.length < 10) return showNotification('Periksa nama & nomor WhatsApp');
 
-            if (phone.length < 10) {
-                showNotification('Nomor WhatsApp tidak valid!');
-                return;
-            }
+        let msg = `Halo, saya ingin pesan *${product.name}* sebanyak *${qty} pcs*.\n`;
 
-            let pickupDate = '', pickupTime = '', address = '';
+        if (delivery === 'pickup') {
+            const d = document.querySelector('.modal-pickup-date')?.value;
+            const t = document.querySelector('.modal-pickup-time')?.value;
+            if (!d || !t) return showNotification('Isi tanggal & waktu ambil');
+            if (new Date(`${d}T${t}`) < new Date()) return showNotification('Waktu tidak boleh di masa lalu');
+            const fmtDate = new Date(d).toLocaleDateString('id-ID');
+            msg += `Tanggal ambil: ${fmtDate}\nWaktu ambil: ${t}\n`;
+        } else {
+            const addr = document.querySelector('.modal-address')?.value?.trim();
+            if (!addr) return showNotification('Isi alamat pengiriman');
+            msg += `Alamat pengiriman: ${addr}\n`;
+        }
 
-            if (deliveryMethod === 'pickup') {
-                pickupDate = document.querySelector('.modal-pickup-date')?.value;
-                pickupTime = document.querySelector('.modal-pickup-time')?.value;
-                if (!pickupDate || !pickupTime) {
-                    showNotification('Harap isi tanggal dan waktu pengambilan');
-                    return;
-                }
-                const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
-                if (selectedDateTime < new Date()) {
-                    showNotification('Tanggal dan waktu tidak boleh di masa lalu!');
-                    return;
-                }
-            } else {
-                address = document.querySelector('.modal-address')?.value?.trim();
-                if (!address) {
-                    showNotification('Harap isi alamat pengiriman');
-                    return;
-                }
-            }
+        const payText = payment === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank';
+        msg += `Catatan: ${notes}\nMetode pembayaran: ${payText}\n\nNama: ${name}\nNo HP: ${phone}`;
 
-            const dateObj = deliveryMethod === 'pickup' ? new Date(pickupDate) : null;
-            const indonesianDate = dateObj ? dateObj.toLocaleDateString('id-ID') : '';
-
-            const paymentText = paymentMethod === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank';
-            const deliveryText = deliveryMethod === 'pickup' 
-                ? `Tanggal ambil: ${indonesianDate}\nWaktu ambil: ${pickupTime}`
-                : `Alamat pengiriman: ${address}`;
-
-            const message = `Halo, saya ingin pesan *${product.name}* sebanyak *${quantity} pcs*.\n` +
-                            `${deliveryText}\n` +
-                            `Catatan: ${notes}\n` +
-                            `Metode pembayaran: ${paymentText}\n\n` +
-                            `Nama: ${name}\n` +
-                            `No HP: ${phone}`;
-
-            const whatsappNumber = '6281335997984'; // ← GANTI DENGAN NOMOR ANDA
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-            productModal.style.display = 'none';
-            window.open(whatsappUrl, '_blank');
-        });
-    }
-}
-
-function handleAddToCart(product) {
-    const pickupDateInput = document.querySelector('.modal-pickup-date');
-    const pickupTimeInput = document.querySelector('.modal-pickup-time');
-    const quantityInput = document.querySelector('.modal-quantity');
-    
-    if (!pickupDateInput || !pickupTimeInput || !quantityInput) return;
-    
-    const pickupDate = pickupDateInput.value;
-    const pickupTime = pickupTimeInput.value;
-    const quantity = parseInt(quantityInput.value) || 1;
-    
-    if (!pickupDate || !pickupTime) {
-        showNotification('Harap isi tanggal dan waktu pengambilan');
-        return;
-    }
-
-    const now = new Date();
-    const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
-    if (selectedDateTime < now) {
-        showNotification('Tanggal dan waktu tidak boleh di masa lalu');
-        return;
-    }
-
-    addToCart(product, quantity, pickupDate, pickupTime);
-    showNotification('Produk berhasil ditambahkan ke keranjang');
-}
-
-// Close Modal
-if (closeModal && productModal) {
-    closeModal.addEventListener('click', () => {
+        const WA = '6281335997984'; // ← GANTI!
+        window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
         productModal.style.display = 'none';
     });
 }
 
-window.addEventListener('click', (e) => {
-    if (e.target === productModal) {
-        productModal.style.display = 'none';
-    }
-});
-
-// Cart Functionality
-if (cartToggle && cartSidebar) {
-    cartToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        cartSidebar.classList.add('active');
-        updateCartDisplay();
-    });
-}
-
-if (closeCart && cartSidebar) {
-    closeCart.addEventListener('click', () => {
-        cartSidebar.classList.remove('active');
-    });
-}
-
-function addToCart(product, quantity, pickupDate, pickupTime) {
-    const existingItem = cart.find(item => 
-        item.id === product.id && 
-        item.pickupDate === pickupDate && 
-        item.pickupTime === pickupTime
-    );
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({
-            ...product,
-            quantity,
-            pickupDate,
-            pickupTime
-        });
-    }
-    
+function addToCart(product, qty, date, time) {
+    const existing = cart.find(i => i.id === product.id && i.pickupDate === date && i.pickupTime === time);
+    if (existing) existing.quantity += qty;
+    else cart.push({ ...product, quantity: qty, pickupDate: date, pickupTime: time });
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 }
 
 function updateCartCount() {
-    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-    if (cartCount) {
-        cartCount.textContent = totalItems;
-    }
+    const total = cart.reduce((s, i) => s + i.quantity, 0);
+    if (cartCount) cartCount.textContent = total;
 }
+
+// Close modal
+if (closeModal) closeModal.addEventListener('click', () => productModal.style.display = 'none');
+window.addEventListener('click', e => { if (e.target === productModal) productModal.style.display = 'none'; });
+
+// Cart sidebar
+if (cartToggle) cartToggle.addEventListener('click', e => {
+    e.preventDefault();
+    cartSidebar?.classList.add('active');
+    updateCartDisplay();
+});
+if (closeCart) closeCart.addEventListener('click', () => cartSidebar?.classList.remove('active'));
 
 function updateCartDisplay() {
     if (!cartItems || !cartTotalPrice) return;
-    
-    cartItems.innerHTML = '';
-    
-    if (cart.length === 0) {
-        cartItems.innerHTML = '<p>Keranjang belanja kosong</p>';
-        cartTotalPrice.textContent = 'Rp 0';
-        return;
-    }
-    
-    let totalPrice = 0;
-    
+    cartItems.innerHTML = cart.length ? '' : '<p style="padding:20px;color:#777;">Keranjang kosong</p>';
+    let total = 0;
     cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        totalPrice += itemTotal;
-        
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
-        cartItem.innerHTML = `
-            <div class="cart-item-info">
-                <h4>${item.name}</h4>
-                <p>Rp ${item.price.toLocaleString('id-ID')} x ${item.quantity}</p>
-                <p>Ambil: ${item.pickupDate} ${item.pickupTime}</p>
-            </div>
-            <div class="cart-item-actions">
-                <button class="remove-item" 
-                        data-id="${item.id}"
-                        data-date="${item.pickupDate}"
-                        data-time="${item.pickupTime}">❌</button>
+        total += item.price * item.quantity;
+        const el = document.createElement('div');
+        el.innerHTML = `
+            <div style="padding:12px;border-bottom:1px solid #eee;">
+                <div style="display:flex;justify-content:space-between;">
+                    <strong>${item.name}</strong>
+                    <span>Rp ${item.price.toLocaleString('id-ID')}</span>
+                </div>
+                <div style="font-size:13px;color:#666;margin:4px 0;">x${item.quantity}</div>
+                <div style="font-size:13px;color:#888;">Ambil: ${item.pickupDate} ${item.pickupTime}</div>
+                <button class="remove-cart" data-id="${item.id}" data-date="${item.pickupDate}" data-time="${item.pickupTime}"
+                    style="margin-top:8px;background:#e74c3c;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:12px;">
+                    Hapus
+                </button>
             </div>
         `;
-        
-        cartItems.appendChild(cartItem);
+        cartItems.appendChild(el);
     });
-    
-    cartTotalPrice.textContent = `Rp ${totalPrice.toLocaleString('id-ID')}`;
-    
-    document.querySelectorAll('.remove-item').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const id = parseInt(e.target.dataset.id);
-            const date = e.target.dataset.date;
-            const time = e.target.dataset.time;
-
-            cart = cart.filter(item => 
-                !(item.id === id && item.pickupDate === date && item.pickupTime === time)
-            );
-
+    if (cartTotalPrice) cartTotalPrice.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    document.querySelectorAll('.remove-cart').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const { id, date, time } = e.target.dataset;
+            cart = cart.filter(i => !(i.id == id && i.pickupDate === date && i.pickupTime === time));
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
             updateCartDisplay();
@@ -480,107 +383,51 @@ function updateCartDisplay() {
     });
 }
 
-if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', () => {
-        if (cart.length === 0) {
-            showNotification('Keranjang belanja kosong');
-            return;
-        }
-        
-        const orderFormEl = document.getElementById('order-form');
-        if (orderFormEl) {
-            orderFormEl.scrollIntoView({ behavior: 'smooth' });
-            if (cartSidebar) cartSidebar.classList.remove('active');
-        } else {
-            window.location.href = 'product.html#order-form';
-        }
-    });
-}
+if (checkoutBtn) checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) return showNotification('Keranjang kosong');
+    const form = document.getElementById('order-form');
+    if (form) {
+        form.scrollIntoView({ behavior: 'smooth' });
+        cartSidebar?.classList.remove('active');
+    } else window.location.href = 'product.html#order-form';
+});
 
-if (reviewForm) {
-    reviewForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('review-name')?.value;
-        const email = document.getElementById('review-email')?.value;
-        const message = document.getElementById('review-message')?.value;
-        if (!name || !email || !message) {
-            showNotification('Semua kolom ulasan harus diisi');
-            return;
-        }
-        console.log('Review submitted:', { name, email, message });
-        showNotification('Terima kasih atas ulasan Anda!');
-        reviewForm.reset();
-    });
-}
+if (reviewForm) reviewForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('review-name')?.value;
+    const email = document.getElementById('review-email')?.value;
+    const msg = document.getElementById('review-message')?.value;
+    if (!name || !email || !msg) return showNotification('Lengkapi semua kolom');
+    showNotification('Terima kasih atas ulasan Anda!');
+    reviewForm.reset();
+});
 
-if (orderForm) {
-    orderForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('customer-name')?.value;
-        const phone = document.getElementById('customer-phone')?.value;
-        if (!name || !phone) {
-            showNotification('Nama dan nomor telepon wajib diisi');
-            return;
-        }
-        console.log('Order submitted:', { name, phone, cart });
-        showNotification('Pesanan Anda telah berhasil dikonfirmasi!');
-        cart = [];
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        orderForm.reset();
-        window.location.href = 'index.html';
-    });
-}
+if (orderForm) orderForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('customer-name')?.value;
+    const phone = document.getElementById('customer-phone')?.value;
+    if (!name || !phone) return showNotification('Nama dan nomor wajib diisi');
+    showNotification('✅ Pesanan dikonfirmasi!');
+    cart = [];
+    localStorage.setItem('cart', '[]');
+    updateCartCount();
+    orderForm.reset();
+    setTimeout(() => window.location.href = 'index.html', 1000);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
-    if (cartItems) {
-        updateCartDisplay();
-    }
+    if (cartItems) updateCartDisplay();
 });
 
-// ========== ANIMASI & INTERAKSI TAMBAHAN ==========
-
+// Animasi scroll (tetap dari kode asli)
 window.addEventListener("scroll", () => {
     const navbar = document.querySelector(".navbar");
-    const featureItems = document.querySelectorAll(".feature-item");
-    const animatables = document.querySelectorAll("[data-animate]");
-
     if (navbar) navbar.classList.toggle("scrolled", window.scrollY > 50);
-
-    featureItems.forEach(item => {
-        if (item.getBoundingClientRect().top < window.innerHeight - 100) {
-            item.classList.add("visible");
-        }
-    });
-
-    animatables.forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 80) {
-            el.classList.add("visible");
-        }
-    });
 });
-
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener("click", e => {
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener("click", e => {
         e.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        if (target) {
-            target.scrollIntoView({ behavior: "smooth" });
-        }
+        document.querySelector(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" });
     });
 });
-
-window.addEventListener("load", () => {
-    const hero = document.querySelector(".hero");
-    if (hero) hero.classList.add("fade-in");
-});
-
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        showNotification('Terima kasih atas pesan Anda!');
-        this.reset();
-    });
-}
