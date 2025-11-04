@@ -174,23 +174,23 @@ function showProductDetail(product) {
                 <div class="product-form">
                     <div class="form-group">
                         <label for="modal-name">Nama Lengkap</label>
-                        <input type="text" class="modal-name" placeholder="Nama Anda" required>
+                        <input type="text" class="modal-name" placeholder="Nama Anda" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
                     </div>
                     <div class="form-group">
                         <label for="modal-phone">Nomor WhatsApp</label>
-                        <input type="tel" class="modal-phone" placeholder="081234567890" required>
+                        <input type="tel" class="modal-phone" placeholder="081234567890" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
                     </div>
 
                     <!-- Pilihan Pengiriman -->
                     <div class="form-group">
-                        <label style="display:block;margin-bottom:6px;font-weight:bold;">Pengiriman</label>
-                        <label style="display:flex;align-items:center;margin-bottom:6px;cursor:pointer;">
+                        <label style="display:block;margin-bottom:8px;font-weight:bold;">Pengiriman</label>
+                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
+                            <span>Diambil</span>
                             <input type="radio" name="modal-delivery" class="modal-delivery" value="pickup" checked style="margin:0;transform:scale(1.15);">
-                            <span style="margin-left:8px;">Diambil</span>
                         </label>
-                        <label style="display:flex;align-items:center;cursor:pointer;">
+                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
+                            <span>Diantar</span>
                             <input type="radio" name="modal-delivery" class="modal-delivery" value="delivery" style="margin:0;transform:scale(1.15);">
-                            <span style="margin-left:8px;">Diantar</span>
                         </label>
                     </div>
 
@@ -198,11 +198,11 @@ function showProductDetail(product) {
                     <div class="pickup-fields">
                         <div class="form-group">
                             <label for="modal-pickup-date">Tanggal Ambil</label>
-                            <input type="date" class="modal-pickup-date" required>
+                            <input type="date" class="modal-pickup-date" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
                         </div>
                         <div class="form-group">
                             <label for="modal-pickup-time">Waktu Ambil</label>
-                            <input type="time" class="modal-pickup-time" required>
+                            <input type="time" class="modal-pickup-time" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
                         </div>
                     </div>
 
@@ -219,7 +219,7 @@ function showProductDetail(product) {
 
                     <div class="form-group">
                         <label for="modal-quantity">Jumlah</label>
-                        <input type="number" class="modal-quantity" min="1" value="1" required>
+                        <input type="number" class="modal-quantity" min="1" value="1" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
                     </div>
                     <div class="form-group">
                         <label for="modal-notes">Catatan (Opsional)</label>
@@ -228,19 +228,19 @@ function showProductDetail(product) {
 
                     <!-- Pilihan Pembayaran -->
                     <div class="form-group">
-                        <label style="display:block;margin-bottom:6px;font-weight:bold;">Metode Pembayaran</label>
-                        <label style="display:flex;align-items:center;margin-bottom:6px;cursor:pointer;">
+                        <label style="display:block;margin-bottom:8px;font-weight:bold;">Metode Pembayaran</label>
+                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
+                            <span>COD (Bayar di Tempat)</span>
                             <input type="radio" name="modal-payment" class="modal-payment" value="cod" checked style="margin:0;transform:scale(1.15);">
-                            <span style="margin-left:8px;">COD (Bayar di Tempat)</span>
                         </label>
-                        <label style="display:flex;align-items:center;cursor:pointer;">
+                        <label style="display:flex;align-items:center;flex-direction:row;gap:8px;cursor:pointer;padding:4px 0;">
+                            <span>Transfer Bank</span>
                             <input type="radio" name="modal-payment" class="modal-payment" value="transfer" style="margin:0;transform:scale(1.15);">
-                            <span style="margin-left:8px;">Transfer Bank</span>
                         </label>
                     </div>
 
-                    <button class="btn-primary modal-add-to-cart" style="margin-top:12px;margin-right:8px;">Tambah ke Keranjang</button>
-                    <button class="btn-primary modal-buy-now-whatsapp" style="margin-top:12px;">Beli Sekarang</button>
+                    <button class="btn-primary modal-add-to-cart" style="margin-top:16px;margin-right:8px;padding:10px 16px;border:none;background:#1e90ff;color:white;border-radius:4px;cursor:pointer;">Tambah ke Keranjang</button>
+                    <button class="btn-primary modal-buy-now-whatsapp" style="margin-top:16px;padding:10px 16px;border:none;background:#25D366;color:white;border-radius:4px;cursor:pointer;">Beli Sekarang</button>
                 </div>
             </div>
         </div>
@@ -331,7 +331,7 @@ function showProductDetail(product) {
                             `Nama: ${name}\n` +
                             `No HP: ${phone}`;
 
-            const whatsappNumber = '6281335997984'; // ← GANTI DENGAN NOMORMU
+            const whatsappNumber = '6281335997984'; // ← GANTI DENGAN NOMOR ANDA
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
