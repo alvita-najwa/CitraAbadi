@@ -213,7 +213,7 @@ function showProductDetail(product) {
                             <textarea class="modal-address" placeholder="Link Alamat Anda" required></textarea>
                         </div>
                         <div class="form-group">
-                            <a href="https://maps.app.goo.gl/TWDaWhiF5AVmMPkr6" target="_blank" style="color:#1e90ff;text-decoration:underline;">Lihat Lokasi Toko</a>
+                            <a href="https://maps.app.goo.gl/jSrmdBZgkyBFtcar9" target="_blank" style="color:#1e90ff;text-decoration:underline;">Lihat Lokasi Toko</a>
                         </div>
                     </div>
 
@@ -335,8 +335,8 @@ function showProductDetail(product) {
                             `Catatan: ${notes}\n` +
                             `Metode pembayaran: ${paymentText}\n\n` +
                             `Nama: ${name}\n` +
-                            `No HP: ${phone}\n\n` +
-            
+                            `No HP: ${phone}`;
+
             // GANTI DENGAN NOMOR WHATSAPP ANDA (format internasional tanpa +)
             const whatsappNumber = '6281335997984'; // ← SESUAIKAN!
             const encodedMessage = encodeURIComponent(message);
