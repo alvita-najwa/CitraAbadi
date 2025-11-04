@@ -412,21 +412,6 @@ h1, h2, h3, h4, h5, h6 {
     object-fit: cover;
 }
 
-/* Untuk label yang berisi input radio + teks */
-.product-form label {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* jarak antara lingkaran dan teks */
-  margin-right: 16px;
-  cursor: pointer;
-}
-
-/* Opsional: pastikan input radio tidak terlihat terlalu besar atau terlalu kecil */
-.product-form input[type="radio"] {
-  margin: 0;
-  transform: scale(1.1); /* sedikit perbesar agar lebih jelas */
-}
-
 /* Contact Section */
 .contact {
     padding: 5rem 0;
