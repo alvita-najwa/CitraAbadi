@@ -511,12 +511,12 @@ function updateCartDisplay() {
             const dateObj = new Date(pickupDate);
             const indonesianDate = dateObj.toLocaleDateString('id-ID');
 
-            const message = `Halo, saya ingin pesan *${name}* sebanyak *${quantity} pcs*.\n` +
-                            `Tanggal ambil: ${indonesianDate}\n` +
-                            `Waktu ambil: ${pickupTime}\n` +
-                            `Metode pembayaran: COD (Bayar di Tempat)\n\n` +
-                            `Nama: [ISI NAMA ANDA]\n` +
-                            `No HP: [ISI NOMOR ANDA]`;
+            const message = `Halo, saya ingin pesan *${product.name}* sebanyak *${quantity} pcs*.\n` +
+                            `${deliveryText}\n` +
+                            `Catatan: ${notes}\n` +
+                            `Metode pembayaran: ${paymentText}\n\n` +
+                            `Nama: ${name}\n` +
+                            `No HP: ${phone}`;
 
             const whatsappNumber = '6281335997984';
             const encodedMessage = encodeURIComponent(message);
