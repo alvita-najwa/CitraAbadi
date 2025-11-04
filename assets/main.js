@@ -178,7 +178,7 @@ function showProductDetail(product) {
                     </div>
                     <div class="form-group">
                         <label for="modal-phone">Nomor WhatsApp</label>
-                        <input type="tel" class="modal-phone" placeholder="081234567890" required>
+                        <input type="tel" class="modal-phone" placeholder="Nomor Whatsapp Anda" required>
                     </div>
 
                     <!-- Pilihan Pengiriman -->
@@ -204,10 +204,10 @@ function showProductDetail(product) {
                     <div class="delivery-fields" style="display:none;">
                         <div class="form-group">
                             <label for="modal-address">Alamat Lengkap</label>
-                            <textarea class="modal-address" placeholder="Contoh: Jl. Merdeka No. 123, RT 01/RW 02, Kel. ABC, Kec. XYZ, Kota Bandung" required></textarea>
+                            <textarea class="modal-address" placeholder="Link Alamat Anda" required></textarea>
                         </div>
                         <div class="form-group">
-                            <a href="https://maps.app.goo.gl/TOKO_ANDA" target="_blank" style="color:#1e90ff; text-decoration:underline;">Lihat Lokasi Toko</a>
+                            <a href="https://maps.app.goo.gl/dveWgDVcz5rZHa6u6" target="_blank" style="color:#1e90ff; text-decoration:underline;">Lihat Lokasi Toko</a>
                         </div>
                     </div>
 
