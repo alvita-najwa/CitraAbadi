@@ -470,7 +470,7 @@ function updateCartDisplay() {
                         data-quantity="${item.quantity}"
                         data-date="${item.pickupDate}"
                         data-time="${item.pickupTime}"
-                        style="margin-bottom:6px;padding:6px 10px;font-size:12px;">Beli via WA</button>
+                        style="margin-bottom:6px;padding:6px 10px;font-size:12px;">Beli Sekarang</button>
                 <button class="remove-item" 
                         data-id="${item.id}"
                         data-date="${item.pickupDate}"
