@@ -331,11 +331,11 @@ function showProductDetail(product) {
                 : `Alamat pengiriman: ${address}`;
 
             const message = `Halo, saya ingin pesan *${product.name}* sebanyak *${quantity} pcs*.\n` +
+                            `Nama: ${name}\n` +
+                            `No HP: ${phone}`;
                             `${deliveryText}\n` +
                             `Catatan: ${notes}\n` +
                             `Metode pembayaran: ${paymentText}\n\n` +
-                            `Nama: ${name}\n` +
-                            `No HP: ${phone}`;
 
             // GANTI DENGAN NOMOR WHATSAPP ANDA (format internasional tanpa +)
             const whatsappNumber = '6281335997984'; // ← SESUAIKAN!
