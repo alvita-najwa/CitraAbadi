@@ -158,7 +158,7 @@ function loadProducts(productsArray) {
     });
 }
 
-// Show Product Detail Modal — DIPERBARUI SESUAI PERMINTAAN
+// Show Product Detail Modal
 function showProductDetail(product) {
     if (!modalBody || !productModal) return;
 
@@ -324,7 +324,6 @@ function showProductDetail(product) {
 
             const dateObj = deliveryMethod === 'pickup' ? new Date(pickupDate) : null;
             const indonesianDate = dateObj ? dateObj.toLocaleDateString('id-ID') : '';
-
             const paymentText = paymentMethod === 'cod' ? 'COD (Bayar di Tempat)' : 'Transfer Bank';
             const deliveryText = deliveryMethod === 'pickup' 
                 ? `Tanggal ambil: ${indonesianDate}\nWaktu ambil: ${pickupTime}`
@@ -339,8 +338,7 @@ function showProductDetail(product) {
 
             const whatsappNumber = '6281335997984';
             const encodedMessage = encodeURIComponent(message);
-            // ✅ URL DIPERBAIKI: TANPA SPASI
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`; // ✅ tanpa spasi
 
             productModal.style.display = 'none';
             window.open(whatsappUrl, '_blank');
@@ -348,79 +346,65 @@ function showProductDetail(product) {
     }
 }
 
-// ✅ FUNGSI DIPERBAIKI: handleAddToCart kini cek metode pengiriman
+// ✅ DIPERBAIKI: Simpan SEMUA data ke keranjang
 function handleAddToCart(product) {
+    const name = document.querySelector('.modal-name')?.value?.trim();
+    const phone = document.querySelector('.modal-phone')?.value?.replace(/\D/g, '');
     const deliveryMethod = document.querySelector('input[name="modal-delivery"]:checked')?.value;
-    
-    if (deliveryMethod === 'delivery') {
-        const address = document.querySelector('.modal-address')?.value?.trim();
-        const quantityInput = document.querySelector('.modal-quantity');
-        const quantity = parseInt(quantityInput?.value) || 1;
+    const paymentMethod = document.querySelector('input[name="modal-payment"]:checked')?.value;
+    const quantity = parseInt(document.querySelector('.modal-quantity')?.value) || 1;
+    const notes = document.querySelector('.modal-notes')?.value?.trim() || '-';
 
-        if (!address) {
-            showNotification('Harap isi alamat pengiriman');
-            return;
-        }
-        if (quantity < 1) {
-            showNotification('Jumlah minimal 1');
-            return;
-        }
+    if (!name || !phone) {
+        showNotification('Harap lengkapi nama dan nomor WhatsApp!');
+        return;
+    }
 
-        // Tambah ke keranjang sebagai item delivery
-        const newItem = {
-            ...product,
-            quantity,
-            delivery: 'delivery',
-            address
-        };
-        cart.push(newItem);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        showNotification('Produk berhasil ditambahkan ke keranjang');
-    } else {
-        // Logika lama untuk "Diambil"
-        const pickupDateInput = document.querySelector('.modal-pickup-date');
-        const pickupTimeInput = document.querySelector('.modal-pickup-time');
-        const quantityInput = document.querySelector('.modal-quantity');
-        
-        if (!pickupDateInput || !pickupTimeInput || !quantityInput) return;
-        
-        const pickupDate = pickupDateInput.value;
-        const pickupTime = pickupTimeInput.value;
-        const quantity = parseInt(quantityInput.value) || 1;
-        
+    if (phone.length < 10) {
+        showNotification('Nomor WhatsApp tidak valid!');
+        return;
+    }
+
+    let pickupDate = '', pickupTime = '', address = '';
+
+    if (deliveryMethod === 'pickup') {
+        pickupDate = document.querySelector('.modal-pickup-date')?.value;
+        pickupTime = document.querySelector('.modal-pickup-time')?.value;
         if (!pickupDate || !pickupTime) {
             showNotification('Harap isi tanggal dan waktu pengambilan');
             return;
         }
-
-        const now = new Date();
         const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
-        if (selectedDateTime < now) {
-            showNotification('Tanggal dan waktu tidak boleh di masa lalu');
+        if (selectedDateTime < new Date()) {
+            showNotification('Tanggal dan waktu tidak boleh di masa lalu!');
             return;
         }
-
-        const existingItem = cart.find(item => 
-            item.id === product.id && 
-            item.pickupDate === pickupDate && 
-            item.pickupTime === pickupTime
-        );
-        
-        if (existingItem) {
-            existingItem.quantity += quantity;
-        } else {
-            cart.push({
-                ...product,
-                quantity,
-                pickupDate,
-                pickupTime
-            });
+    } else {
+        address = document.querySelector('.modal-address')?.value?.trim();
+        if (!address) {
+            showNotification('Harap isi alamat pengiriman');
+            return;
         }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        showNotification('Produk berhasil ditambahkan ke keranjang');
     }
+
+    // Simpan SEMUA ke keranjang
+    const cartItem = {
+        ...product,
+        customerName: name,
+        customerPhone: phone,
+        quantity,
+        notes,
+        delivery: deliveryMethod,
+        payment: paymentMethod,
+        pickupDate,
+        pickupTime,
+        address
+    };
+
+    cart.push(cartItem);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    showNotification('Produk berhasil ditambahkan ke keranjang');
 }
 
 // Close Modal
@@ -459,7 +443,7 @@ function updateCartCount() {
     }
 }
 
-// ✅ UPDATE: Tampilkan info sesuai tipe pengiriman
+// Update Cart Display — Tampilkan semua info
 function updateCartDisplay() {
     if (!cartItems || !cartTotalPrice) return;
     
@@ -483,6 +467,8 @@ function updateCartDisplay() {
         } else {
             deliveryInfo = `<p>Ambil: ${item.pickupDate} ${item.pickupTime}</p>`;
         }
+
+        const paymentText = item.payment === 'transfer' ? 'Transfer Bank' : 'COD (Bayar di Tempat)';
         
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
@@ -491,16 +477,20 @@ function updateCartDisplay() {
                 <h4>${item.name}</h4>
                 <p>Rp ${item.price.toLocaleString('id-ID')} x ${item.quantity}</p>
                 ${deliveryInfo}
+                <p>Pembayaran: ${paymentText}</p>
             </div>
             <div class="cart-item-actions">
                 <button class="buy-now-wa-cart btn-primary" 
-                        data-id="${item.id}"
                         data-name="${item.name}"
                         data-quantity="${item.quantity}"
-                        data-delivery="${item.delivery || 'pickup'}"
+                        data-notes="${item.notes}"
+                        data-delivery="${item.delivery}"
+                        data-payment="${item.payment}"
                         data-date="${item.pickupDate || ''}"
                         data-time="${item.pickupTime || ''}"
                         data-address="${item.address || ''}"
+                        data-customer-name="${item.customerName}"
+                        data-customer-phone="${item.customerPhone}"
                         style="margin-bottom:6px;padding:6px 10px;font-size:12px;">Beli Sekarang</button>
                 <button class="remove-item" 
                         data-id="${item.id}"
@@ -533,16 +523,21 @@ function updateCartDisplay() {
         });
     });
 
-    // ✅ BELI LANGSUNG VIA WA DARI KERANJANG — SUPPORT DIANTAR & DIAMBIL
+    // ✅ PESAN SAMA PERSIS DENGAN YANG DI MODAL
     document.querySelectorAll('.buy-now-wa-cart').forEach(button => {
         button.addEventListener('click', (e) => {
             const name = e.target.dataset.name;
             const quantity = e.target.dataset.quantity;
-            const delivery = e.target.dataset.delivery || 'pickup';
+            const notes = e.target.dataset.notes;
+            const delivery = e.target.dataset.delivery;
+            const payment = e.target.dataset.payment;
             const pickupDate = e.target.dataset.date;
             const pickupTime = e.target.dataset.time;
             const address = e.target.dataset.address;
+            const customerName = e.target.dataset.customerName;
+            const customerPhone = e.target.dataset.customerPhone;
 
+            const paymentText = payment === 'transfer' ? 'Transfer Bank' : 'COD (Bayar di Tempat)';
             let deliveryText = '';
             if (delivery === 'delivery') {
                 deliveryText = `Alamat pengiriman: ${address}\n`;
@@ -554,9 +549,10 @@ function updateCartDisplay() {
 
             const message = `Halo, saya ingin pesan *${name}* sebanyak *${quantity} pcs*.\n` +
                             `${deliveryText}` +
+                            `Catatan: ${notes}\n` +
                             `Metode pembayaran: ${paymentText}\n\n` +
-                            `Nama: ${name}\n` +
-                            `No HP: ${phone}`;
+                            `Nama: ${customerName}\n` +
+                            `No HP: ${customerPhone}`;
 
             const whatsappNumber = '6281335997984';
             const encodedMessage = encodeURIComponent(message);
