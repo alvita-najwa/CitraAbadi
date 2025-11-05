@@ -125,3 +125,31 @@
     font-size: 0.85rem;
 }
 }
+
+/* ================================
+   CONTACT PAGE RESPONSIVE
+===================================*/
+
+@media (max-width: 992px) {
+  .contact-header h1 {
+    font-size: 2rem;
+  }
+  .contact-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contact-form,
+  .map-container {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-header h1 {
+    font-size: 1.8rem;
+  }
+  .contact-container {
+    padding: 1rem;
+  }
+}
