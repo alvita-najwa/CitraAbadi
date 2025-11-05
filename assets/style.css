@@ -803,3 +803,68 @@ h1, h2, h3, h4, h5, h6 {
     padding: 3rem 0;
     background-color: var(--light-gray);
 }
+
+.products {
+    padding: 5rem 0;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-img { /* Kelas untuk gambar produk */
+    width: 100%;
+    height: 200px;
+    background-color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-img img { /* Gaya untuk gambar dalam kartu produk */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.product-info h3 {
+    margin-bottom: 0.5rem;
+}
+
+.product-detail-img { /* Kelas untuk gambar detail produk */
+    width: 98%;
+    height: 400px;
+    background-color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.product-detail-img img { /* Gaya untuk gambar dalam detail produk */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
