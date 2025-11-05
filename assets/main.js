@@ -641,11 +641,34 @@ window.addEventListener("load", () => {
 });
 
 // Contact Form
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        showNotification('Terima kasih atas pesan Anda!');
-        this.reset();
-    });
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contactForm");
+  const message = document.getElementById("form-message");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Contoh validasi sederhana
+    const nama = document.getElementById("nama").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const ulasan = document.getElementById("ulasan").value.trim();
+
+    if (!nama || !email || !ulasan) {
+      message.textContent = "Harap isi semua kolom!";
+      message.className = "form-message error";
+      return;
+    }
+
+    // Jika semua sudah diisi
+    message.textContent = "Terima kasih! Ulasan Anda telah terkirim 😊";
+    message.className = "form-message success";
+
+    // Reset form setelah submit
+    form.reset();
+
+    // Hilangkan pesan setelah beberapa detik
+    setTimeout(() => {
+      message.className = "form-message";
+    }, 4000);
+  });
+});
