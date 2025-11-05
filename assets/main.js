@@ -640,35 +640,30 @@ window.addEventListener("load", () => {
     if (hero) hero.classList.add("fade-in");
 });
 
-// Contact Form
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  const message = document.getElementById("form-message");
+// === FORM KONTAK ===
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+        const name = document.getElementById("nama")?.value.trim();
+        const email = document.getElementById("email")?.value.trim();
+        const message = document.getElementById("ulasan")?.value.trim();
+        const msgBox = document.getElementById("form-message");
 
-    // Contoh validasi sederhana
-    const nama = document.getElementById("nama").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const ulasan = document.getElementById("ulasan").value.trim();
+        if (!name || !email || !message) {
+            msgBox.textContent = "Harap isi semua kolom terlebih dahulu.";
+            msgBox.className = "form-message error";
+            return;
+        }
 
-    if (!nama || !email || !ulasan) {
-      message.textContent = "Harap isi semua kolom!";
-      message.className = "form-message error";
-      return;
-    }
+        msgBox.textContent = "Terima kasih! Pesan Anda berhasil dikirim 😊";
+        msgBox.className = "form-message success";
+        contactForm.reset();
 
-    // Jika semua sudah diisi
-    message.textContent = "Terima kasih! Ulasan Anda telah terkirim 😊";
-    message.className = "form-message success";
-
-    // Reset form setelah submit
-    form.reset();
-
-    // Hilangkan pesan setelah beberapa detik
-    setTimeout(() => {
-      message.className = "form-message";
-    }, 4000);
-  });
-});
+        // Hilangkan pesan otomatis
+        setTimeout(() => {
+            msgBox.className = "form-message";
+        }, 4000);
+    });
+}
