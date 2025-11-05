@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Web Icon -->
-    <link rel="shortcut icon" href="img/NPOTA CITRA ABADI.png" type="image/x-icon">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <img src="img/logo.png" alt="Logo" class="logo-img">
-                <a href="index.html">CITRA ABADI</a>
+                <a href="index.html">
+                    <img src="img/logo.png" alt="Citra Abadi Logo" class="logo-img">
+                    <span class="logo-text">CITRA ABADI</span>
+                </a>
             </div>
             <div class="nav-menu" id="nav-menu">
                 <a href="index.html" class="nav-link">Beranda</a>
@@ -43,7 +43,7 @@
     <section class="products">
         <div class="container">
             <div class="section-title">
-                <h1>Produk</h1>
+                <h1>Product</h1>
             </div>
             <div class="products-grid" id="products-grid">
                 <!-- Products will be loaded dynamically -->
@@ -51,17 +51,48 @@
         </div>
     </section>
 
+    <!-- Order Form Section -->
+    <section class="order-form" id="order-form">
+        <div class="container">
+            <div class="section-title">
+                <h2>Form Pemesanan</h2>
+            </div>
+            <form id="order-form-details">
+                <div class="form-group">
+                    <label for="customer-name">Nama Pelanggan</label>
+                    <input type="text" id="customer-name" name="customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Nomor Telepon</label>
+                    <input type="tel" id="customer-phone" name="customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="pickup-date">Tanggal Ambil</label>
+                    <input type="date" id="pickup-date" name="pickup-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="pickup-time">Waktu Ambil</label>
+                    <input type="time" id="pickup-time" name="pickup-time" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Catatan Tambahan</label>
+                    <textarea id="notes" name="notes" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Konfirmasi Pesanan</button>
+            </form>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="footer">
-<div class="footer-container">
-    <div class="footer-info">
-        <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
-        <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
-    </div>
-    <div class="footer-dev">
+     <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
+                <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
+            </div>
+        <div class="footer-dev">
         <p>Developed with ❤️ by <span class="dev-name">Kelompok 4</span> | <span class="subject">PWEB</span></p>
     </div>
-</div>
 </footer>
 
     <!-- Product Detail Modal -->
@@ -85,7 +116,9 @@
         </div>
         <div class="cart-total">
             <p>Total: <span id="cart-total-price">Rp 0</span></p>
+            <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
         </div>
+    </div>
 
     <script src="assets/main.js"></script>
 </body>
