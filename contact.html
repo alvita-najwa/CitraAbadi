@@ -1,91 +1,87 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Citra Abadi - Kontak</title>
-
-  <!-- Link CSS -->
-  <link rel="stylesheet" href="assets/style.css">
-  <link rel="stylesheet" href="assets/responsive.css">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="img/NPOTA CITRA ABADI.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citra Abadi - Kontak</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <div class="nav-logo">
-        <img src="img/logo.png" alt="Logo" class="logo-img">
-        <a href="index.html">CITRA ABADI</a>
-
-      </div>
-      <div class="nav-menu" id="nav-menu">
-        <a href="index.html" class="nav-link">Beranda</a>
-        <a href="about.html" class="nav-link">Tentang Kami</a>
-        <a href="product.html" class="nav-link">Produk</a>
-        <a href="contact.html" class="nav-link active">Kontak</a>
-        <a href="developer.html" class="nav-link">Developer</a>
-        <div class="search-container">
-          <input type="text" id="search-input" placeholder="Cari produk...">
+<!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="img/logo.png" alt="Citra Abadi Logo" class="logo-img">
+                    <span class="logo-text">CITRA ABADI</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="about.html" class="nav-link">Tentang Kami</a>
+                <a href="product.html" class="nav-link">Produk</a>
+                <a href="contact.html" class="nav-link active">Kontak</a>
+                <a href="developer.html" class="nav-link">Developer</a>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Cari produk...">
+                </div>
+                <div class="cart-icon">
+                    <a href="#" id="cart-toggle">🛒 <span id="cart-count">0</span></a>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-        <div class="cart-icon">
-          <a href="#" id="cart-toggle">🛒 <span id="cart-count">0</span></a>
-        </div>
-      </div>
-      <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- MAIN CONTENT -->
-  <div class="container contact-container">
-    <section class="contact-header">
-      <h1>Hubungi Kami</h1>
-      <p>Silakan kirim ulasan atau pertanyaan Anda melalui formulir di bawah ini.</p>
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h1>Contact</h1>
+            </div>
+            <div class="contact-content">
+                <div class="contact-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.211324653567!2d112.17596717471073!3d-7.973831478862816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7882d1f3d3d3a5%3A0x1e4a2e5e5e5e5e5e!2sNglegok%2C%20Kec.%20Nglegok%2C%20Kabupaten%20Blitar%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1640000000000!5m2!1sid!2sid" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="contact-form">
+                    <h2>Form Ulasan</h2>
+                    <form id="review-form">
+                        <div class="form-group">
+                            <label for="review-name">Nama</label>
+                            <input type="text" id="review-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-email">Email</label>
+                            <input type="email" id="review-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-message">Ulasan</label>
+                            <textarea id="review-message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Kirim Ulasan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="contact-wrapper">
-      <!-- FORM KONTAK -->
-      <div class="contact-form">
-        <form id="contactForm">
-          <input type="text" id="nama" name="nama" required placeholder="Nama lengkap">
-          <input type="email" id="email" name="email" required placeholder="Alamat email">
-          <textarea id="ulasan" name="ulasan" rows="5" required placeholder="Tulis ulasan Anda..."></textarea>
-          <button type="submit" class="btn-submit">Kirim Ulasan</button>
-          <p id="form-message" class="form-message"></p>
-        </form>
-      </div>
-
-      <!-- GOOGLE MAP -->
-      <div class="map-container">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m13!1m8!1m3!1d15802.526586301443!2d112.2026346!3d-8.0368594!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e0!3m2!1sid!2sid!4v1762048642841!5m2!1sid!2sid" 
-          allowfullscreen 
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </section>
-  </div>
-
-  <!-- FOOTER -->
- <footer class="footer">
-<div class="footer-container">
-    <div class="footer-info">
-        <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
-        <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
-    </div>
-    <div class="footer-dev">
+    <!-- Footer -->
+       <!-- Footer -->
+     <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
+                <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
+            </div>
+        <div class="footer-dev">
         <p>Developed with ❤️ by <span class="dev-name">Kelompok 4</span> | <span class="subject">PWEB</span></p>
     </div>
-</div>
 </footer>
 
     <!-- Cart Sidebar -->
@@ -101,6 +97,11 @@
             <p>Total: <span id="cart-total-price">Rp 0</span></p>
             <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
         </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <p>Terima kasih atas ulasan Anda!</p>
     </div>
 
     <script src="assets/main.js"></script>
