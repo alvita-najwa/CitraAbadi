@@ -248,7 +248,7 @@ function showProductDetail(product) {
     
     productModal.style.display = 'flex';
 
-    // Tambahkan style inline ke radio agar sejajar & ukuran pas
+    // Style radio button
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.style.margin = '0';
         radio.style.transform = 'scale(1.2)';
@@ -284,7 +284,7 @@ function showProductDetail(product) {
     if (buyNowWA) {
         buyNowWA.addEventListener('click', () => {
             const name = document.querySelector('.modal-name')?.value?.trim();
-            const phone = document.querySelector('.modal-phone')?.value?.replace(/\D/g, ''); // Hanya angka
+            const phone = document.querySelector('.modal-phone')?.value?.replace(/\D/g, '');
             const deliveryMethod = document.querySelector('input[name="modal-delivery"]:checked')?.value;
             const paymentMethod = document.querySelector('input[name="modal-payment"]:checked')?.value;
             const quantity = parseInt(document.querySelector('.modal-quantity')?.value) || 1;
@@ -337,10 +337,9 @@ function showProductDetail(product) {
                             `Nama: ${name}\n` +
                             `No HP: ${phone}`;
 
-            // GANTI DENGAN NOMOR WHATSAPP ANDA (format internasional tanpa +)
-            const whatsappNumber = '6281335997984'; // ← SESUAIKAN!
+            const whatsappNumber = '6281335997984';
             const encodedMessage = encodeURIComponent(message);
-            // ✅ DIPERBAIKI: HAPUS SPASI BERLEBIH
+            // ✅ URL DIPERBAIKI: TANPA SPASI
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
             productModal.style.display = 'none';
@@ -349,31 +348,79 @@ function showProductDetail(product) {
     }
 }
 
+// ✅ FUNGSI DIPERBAIKI: handleAddToCart kini cek metode pengiriman
 function handleAddToCart(product) {
-    const pickupDateInput = document.querySelector('.modal-pickup-date');
-    const pickupTimeInput = document.querySelector('.modal-pickup-time');
-    const quantityInput = document.querySelector('.modal-quantity');
+    const deliveryMethod = document.querySelector('input[name="modal-delivery"]:checked')?.value;
     
-    if (!pickupDateInput || !pickupTimeInput || !quantityInput) return;
-    
-    const pickupDate = pickupDateInput.value;
-    const pickupTime = pickupTimeInput.value;
-    const quantity = parseInt(quantityInput.value) || 1;
-    
-    if (!pickupDate || !pickupTime) {
-        showNotification('Harap isi tanggal dan waktu pengambilan');
-        return;
-    }
+    if (deliveryMethod === 'delivery') {
+        const address = document.querySelector('.modal-address')?.value?.trim();
+        const quantityInput = document.querySelector('.modal-quantity');
+        const quantity = parseInt(quantityInput?.value) || 1;
 
-    const now = new Date();
-    const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
-    if (selectedDateTime < now) {
-        showNotification('Tanggal dan waktu tidak boleh di masa lalu');
-        return;
-    }
+        if (!address) {
+            showNotification('Harap isi alamat pengiriman');
+            return;
+        }
+        if (quantity < 1) {
+            showNotification('Jumlah minimal 1');
+            return;
+        }
 
-    addToCart(product, quantity, pickupDate, pickupTime);
-    showNotification('Produk berhasil ditambahkan ke keranjang');
+        // Tambah ke keranjang sebagai item delivery
+        const newItem = {
+            ...product,
+            quantity,
+            delivery: 'delivery',
+            address
+        };
+        cart.push(newItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        showNotification('Produk berhasil ditambahkan ke keranjang');
+    } else {
+        // Logika lama untuk "Diambil"
+        const pickupDateInput = document.querySelector('.modal-pickup-date');
+        const pickupTimeInput = document.querySelector('.modal-pickup-time');
+        const quantityInput = document.querySelector('.modal-quantity');
+        
+        if (!pickupDateInput || !pickupTimeInput || !quantityInput) return;
+        
+        const pickupDate = pickupDateInput.value;
+        const pickupTime = pickupTimeInput.value;
+        const quantity = parseInt(quantityInput.value) || 1;
+        
+        if (!pickupDate || !pickupTime) {
+            showNotification('Harap isi tanggal dan waktu pengambilan');
+            return;
+        }
+
+        const now = new Date();
+        const selectedDateTime = new Date(`${pickupDate}T${pickupTime}`);
+        if (selectedDateTime < now) {
+            showNotification('Tanggal dan waktu tidak boleh di masa lalu');
+            return;
+        }
+
+        const existingItem = cart.find(item => 
+            item.id === product.id && 
+            item.pickupDate === pickupDate && 
+            item.pickupTime === pickupTime
+        );
+        
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({
+                ...product,
+                quantity,
+                pickupDate,
+                pickupTime
+            });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        showNotification('Produk berhasil ditambahkan ke keranjang');
+    }
 }
 
 // Close Modal
@@ -383,7 +430,6 @@ if (closeModal && productModal) {
     });
 }
 
-// Close Modal when clicking outside
 window.addEventListener('click', (e) => {
     if (e.target === productModal) {
         productModal.style.display = 'none';
@@ -405,29 +451,6 @@ if (closeCart && cartSidebar) {
     });
 }
 
-// Add to Cart
-function addToCart(product, quantity, pickupDate, pickupTime) {
-    const existingItem = cart.find(item => 
-        item.id === product.id && 
-        item.pickupDate === pickupDate && 
-        item.pickupTime === pickupTime
-    );
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({
-            ...product,
-            quantity,
-            pickupDate,
-            pickupTime
-        });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-}
-
 // Update Cart Count
 function updateCartCount() {
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
@@ -436,7 +459,7 @@ function updateCartCount() {
     }
 }
 
-// ✅ UPDATE: Tambahkan tombol "Beli via WA" di setiap item keranjang
+// ✅ UPDATE: Tampilkan info sesuai tipe pengiriman
 function updateCartDisplay() {
     if (!cartItems || !cartTotalPrice) return;
     
@@ -454,27 +477,35 @@ function updateCartDisplay() {
         const itemTotal = item.price * item.quantity;
         totalPrice += itemTotal;
         
+        let deliveryInfo = '';
+        if (item.delivery === 'delivery') {
+            deliveryInfo = `<p>Diantar ke: ${item.address}</p>`;
+        } else {
+            deliveryInfo = `<p>Ambil: ${item.pickupDate} ${item.pickupTime}</p>`;
+        }
+        
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
                 <p>Rp ${item.price.toLocaleString('id-ID')} x ${item.quantity}</p>
-                <p>Ambil: ${item.pickupDate} ${item.pickupTime}</p>
+                ${deliveryInfo}
             </div>
             <div class="cart-item-actions">
                 <button class="buy-now-wa-cart btn-primary" 
                         data-id="${item.id}"
                         data-name="${item.name}"
-                        data-price="${item.price}"
                         data-quantity="${item.quantity}"
-                        data-date="${item.pickupDate}"
-                        data-time="${item.pickupTime}"
+                        data-delivery="${item.delivery || 'pickup'}"
+                        data-date="${item.pickupDate || ''}"
+                        data-time="${item.pickupTime || ''}"
+                        data-address="${item.address || ''}"
                         style="margin-bottom:6px;padding:6px 10px;font-size:12px;">Beli Sekarang</button>
                 <button class="remove-item" 
                         data-id="${item.id}"
-                        data-date="${item.pickupDate}"
-                        data-time="${item.pickupTime}">❌</button>
+                        data-date="${item.pickupDate || ''}"
+                        data-time="${item.pickupTime || ''}">❌</button>
             </div>
         `;
         
@@ -491,7 +522,9 @@ function updateCartDisplay() {
             const time = e.target.dataset.time;
 
             cart = cart.filter(item => 
-                !(item.id === id && item.pickupDate === date && item.pickupTime === time)
+                !(item.id === id && 
+                  ((item.delivery === 'delivery') || 
+                   (item.pickupDate === date && item.pickupTime === time)))
             );
 
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -500,20 +533,27 @@ function updateCartDisplay() {
         });
     });
 
-    // ✅ BELI LANGSUNG VIA WA DARI KERANJANG
+    // ✅ BELI LANGSUNG VIA WA DARI KERANJANG — SUPPORT DIANTAR & DIAMBIL
     document.querySelectorAll('.buy-now-wa-cart').forEach(button => {
         button.addEventListener('click', (e) => {
             const name = e.target.dataset.name;
             const quantity = e.target.dataset.quantity;
+            const delivery = e.target.dataset.delivery || 'pickup';
             const pickupDate = e.target.dataset.date;
             const pickupTime = e.target.dataset.time;
+            const address = e.target.dataset.address;
 
-            const dateObj = new Date(pickupDate);
-            const indonesianDate = dateObj.toLocaleDateString('id-ID');
+            let deliveryText = '';
+            if (delivery === 'delivery') {
+                deliveryText = `Alamat pengiriman: ${address}\n`;
+            } else {
+                const dateObj = new Date(pickupDate);
+                const indonesianDate = dateObj.toLocaleDateString('id-ID');
+                deliveryText = `Tanggal ambil: ${indonesianDate}\nWaktu ambil: ${pickupTime}\n`;
+            }
 
             const message = `Halo, saya ingin pesan *${name}* sebanyak *${quantity} pcs*.\n` +
-                            `Tanggal ambil: ${indonesianDate}\n` +
-                            `Waktu ambil: ${pickupTime}\n` +
+                            `${deliveryText}` +
                             `Metode pembayaran: COD (Bayar di Tempat)\n\n` +
                             `Nama: [ISI NAMA ANDA]\n` +
                             `No HP: [ISI NOMOR ANDA]`;
@@ -582,7 +622,6 @@ if (orderForm) {
         
         showNotification('Pesanan Anda telah berhasil dikonfirmasi!');
         
-        // Clear cart
         cart = [];
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
@@ -602,7 +641,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== ANIMASI & INTERAKSI TAMBAHAN ==========
 
-// Navbar scroll + animasi fitur + animasi umum
 window.addEventListener("scroll", () => {
     const navbar = document.querySelector(".navbar");
     const featureItems = document.querySelectorAll(".feature-item");
@@ -623,7 +661,6 @@ window.addEventListener("scroll", () => {
     });
 });
 
-// Smooth scroll untuk semua link anchor
 document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", e => {
         e.preventDefault();
@@ -634,36 +671,16 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     });
 });
 
-// Hero fade saat load
 window.addEventListener("load", () => {
     const hero = document.querySelector(".hero");
     if (hero) hero.classList.add("fade-in");
 });
 
-// === FORM KONTAK ===
-const contactForm = document.getElementById("contactForm");
+const contactForm = document.getElementById('contactForm');
 if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
+    contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-
-        const name = document.getElementById("nama")?.value.trim();
-        const email = document.getElementById("email")?.value.trim();
-        const message = document.getElementById("ulasan")?.value.trim();
-        const msgBox = document.getElementById("form-message");
-
-        if (!name || !email || !message) {
-            msgBox.textContent = "Harap isi semua kolom terlebih dahulu.";
-            msgBox.className = "form-message error";
-            return;
-        }
-
-        msgBox.textContent = "Terima kasih! Pesan Anda berhasil dikirim 😊";
-        msgBox.className = "form-message success";
-        contactForm.reset();
-
-        // Hilangkan pesan otomatis
-        setTimeout(() => {
-            msgBox.className = "form-message";
-        }, 4000);
+        showNotification('Terima kasih atas pesan Anda!');
+        this.reset();
     });
 }
