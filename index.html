@@ -7,18 +7,16 @@
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/responsive.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Web Icon -->
-    <link rel="shortcut icon" href="img/NPOTA CITRA ABADI.png" type="image/x-icon">
-    <!-- AOS Animation Library -->
-     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
 </head>
 <body>
-    <!-- Navbar -->
+<!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <img src="img/logo.png" alt="Logo" class="logo-img">
-                <a href="index.html">CITRA ABADI</a>
+                <a href="index.html">
+                    <img src="img/logo.png" alt="Citra Abadi Logo" class="logo-img">
+                    <span class="logo-text">CITRA ABADI</span>
+                </a>
             </div>
             <div class="nav-menu" id="nav-menu">
                 <a href="index.html" class="nav-link active">Beranda</a>
@@ -42,7 +40,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" data-aos="fade-in" data-aos-duration="1200">
+    <section class="hero">
         <div class="hero-content">
             <h1>CITRA ABADI</h1>
             <p>Solusi percetakan dan desain terpercaya untuk kebutuhan Anda</p>
@@ -77,38 +75,33 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-<div class="footer-container">
-    <div class="footer-info">
-        <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
-        <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
-    </div>
-    <div class="footer-dev">
+   <!-- Footer -->
+     <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
+                <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
+            </div>
+        <div class="footer-dev">
         <p>Developed with ❤️ by <span class="dev-name">Kelompok 4</span> | <span class="subject">PWEB</span></p>
     </div>
-</div>
 </footer>
 
-
     <!-- Cart Sidebar -->
-<div class="cart-sidebar" id="cart-sidebar">
-    <div class="cart-header">
-        <h3>Keranjang Belanja</h3>
-        <button id="close-cart">&times;</button>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button id="close-cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total">
+            <p>Total: <span id="cart-total-price">Rp 0</span></p>
+            <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
+        </div>
     </div>
-    <div class="cart-items" id="cart-items">
-        <!-- Cart items will be added here dynamically -->
-    </div>
-    <div class="cart-total">
-        <p>Total: <span id="cart-total-price">Rp 0</span></p>
-        <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
-    </div>
-</div>
 
-<script src="assets/main.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-AOS.init();
-</script>
+    <script src="assets/main.js"></script>
 </body>
 </html>
