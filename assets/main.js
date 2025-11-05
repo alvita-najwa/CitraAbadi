@@ -554,9 +554,9 @@ function updateCartDisplay() {
 
             const message = `Halo, saya ingin pesan *${name}* sebanyak *${quantity} pcs*.\n` +
                             `${deliveryText}` +
-                            `Metode pembayaran: COD (Bayar di Tempat)\n\n` +
-                            `Nama: [ISI NAMA ANDA]\n` +
-                            `No HP: [ISI NOMOR ANDA]`;
+                            `Metode pembayaran: ${paymentText}\n\n` +
+                            `Nama: ${name}\n` +
+                            `No HP: ${phone}`;
 
             const whatsappNumber = '6281335997984';
             const encodedMessage = encodeURIComponent(message);
