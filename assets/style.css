@@ -158,9 +158,9 @@ h1, h2, h3, h4, h5, h6 {
 .hero {
     margin-top: -80px;
     background: 
-        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),  
         url('../img/46c4cfd82657199c01f444710ee56d0e.jpg');
-    background-size: cover;
+ background-size: cover;
     background-position: center;
     height: calc(100vh + 80px);
     display: flex;
