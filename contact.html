@@ -76,12 +76,33 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
-    <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
-    <p>Developed with ❤️ by Kelompok 4 | PWEB</p>
-  </footer>
+ <footer class="footer">
+<div class="footer-container">
+    <div class="footer-info">
+        <p>&copy; 2025 Citra Abadi. All rights reserved.</p>
+        <p>Nglegok, Kab. Blitar | Telp: (+62) 813-3599-7984</p>
+    </div>
+    <div class="footer-dev">
+        <p>Developed with ❤️ by <span class="dev-name">Kelompok 4</span> | <span class="subject">PWEB</span></p>
+    </div>
+</div>
+</footer>
 
-  <script src="assets/main.js"></script>
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button id="close-cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total">
+            <p>Total: <span id="cart-total-price">Rp 0</span></p>
+            <button class="btn-primary" id="checkout-btn">Beli Sekarang</button>
+        </div>
+    </div>
+
+    <script src="assets/main.js"></script>
 </body>
 </html>
